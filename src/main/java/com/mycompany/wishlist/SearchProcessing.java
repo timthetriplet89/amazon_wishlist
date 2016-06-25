@@ -171,13 +171,11 @@ try (PrintWriter out = response.getWriter()) {
         params.put("ResponseGroup","Images,ItemAttributes,Offers");
         params.put("BrowseNode", "17");
         params.put("SearchIndex", "Books");
-        
-//        Images%2CItemAttributes%2COffers&
-                
 
         requestUrl = helper.sign(params);
-        out.println("Signed Request is \"" + requestUrl + "\""); ////////////////////////////////////////////
-        out.println();
+        out.println("<p><a href=\"" + requestUrl + "\">Click Here<//a> to view search results in XML");
+//        out.println("Signed Request is \"" + requestUrl + "\""); ////////////////////////////////////////////
+//        out.println();
         
 //        title = fetchTitle(requestUrl);
 //        out.println("Signed Title is \"" + title + "\"");
