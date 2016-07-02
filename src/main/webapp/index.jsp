@@ -20,7 +20,7 @@
             user. Clicking on link will display other user's list in display_list
             section and change the name in the session variable to show the new
             user's list-->
-            <h2>Friends</h2>
+            <h2>${name}'s Friends</h2>
             <ul>
                 <li>Mom</li>
                 <li>Dad</li>
@@ -36,7 +36,7 @@
             
             <!-- User name will be stored as session setting and will be populated
             here from sesson variable -->
-            <h2>User's list</h2>
+            <h2>${name}'s list</h2>
             <ul>
                 <li>Drum set</li>
                 <li>Drone</li>
