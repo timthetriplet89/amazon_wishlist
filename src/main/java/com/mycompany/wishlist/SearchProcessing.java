@@ -28,6 +28,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import com.mycompany.wishlist.SignedRequestsHelper;
 
 /**
  *
@@ -151,8 +152,6 @@ public class SearchProcessing extends HttpServlet {
             return;
         }
         
-        String requestUrl = null;
-        String title = null;
 
         /* The helper can sign requests in two forms - map form and string form */
         /*
@@ -181,127 +180,70 @@ try (PrintWriter out = response.getWriter()) {
         params.put("BrowseNode", "17");
         params.put("SearchIndex", "Books");
 
-        requestUrl = helper.sign(params);
+        String requestUrl = helper.sign(params);
         out.println("<p><a href=\"" + requestUrl + "\">Click Here</a> to view search results in XML");
         
         DocumentBuilderFactory docIt = DocumentBuilderFactory.newInstance();
         DocumentBuilder build = docIt.newDocumentBuilder();
         Document doc = build.parse(requestUrl);
-        
-        
-//        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder db = dbf.newDocumentBuilder();
-//        Document doc = db.parse(new URL(requestUrl).openStream());
-//        
+           
         doc.getDocumentElement().normalize();
         NodeList itemList = doc.getElementsByTagName("Item");
         
         for (int i = 0; i < itemList.getLength(); i++) {
             Element element = (Element) itemList.item(i);
-            //out.println("<p>" + element.getNodeName() + "</p>");
             
-            NodeList urlList = element.getElementsByTagName("DetailPageURL");
-            NodeList titleList = element.getElementsByTagName("Title");
-            for (int j = 0; j < urlList.getLength(); j++) {
-                //Element e2 = (Element) innerTag.item(j);
-                Node urls = urlList.item(j);
-                Node titles = titleList.item(j);
-                String website = urls.getTextContent();
-                String data = titles.getTextContent();
-                out.println("<p>" + website + "</p>");
-                out.println("<p>" + data + "</p>");
-            }
+            String website = getChildContent(element, "DetailPageURL");
+            Element itemAttributes = getChild(element, "ItemAttributes");
+            String title = getChildContent(itemAttributes, "Title");
+            out.println("<p>" + website + "</p>");
+            out.println("<p>" + title + "</p>");
+            
         }
         
         
+    } catch(Exception exception) {
+        System.out.println("Exception caught");
+    }        
         
-        
-        /*File input = new File(requestUrl);
-        
-        DocumentBuilderFactory docIt = DocumentBuilderFactory.newInstance();
-        DocumentBuilder build = docIt.newDocumentBuilder();
-        Document doc = build.parse(input);
-        
-        doc.getDocumentElement().normalize();
-        NodeList itemList = doc.getElementsByTagName("Item");
-        
-        for (int i = 0; i < itemList.getLength(); i++) {
-            Element element = (Element) itemList.item(i);
-            out.println("<p>" + element.getNodeName().toUpperCase() + "</p>");
-            //out.println (element.getNodeName().toUpperCase());
-        }*/
-
-        
-        
-//        out.println("Signed Request is \"" + requestUrl + "\""); ////////////////////////////////////////////
-//        out.println();
-        
-//        title = fetchTitle(requestUrl);
-//        out.println("Signed Title is \"" + title + "\"");
-//        out.println();
-//        out.println();
-        
-        /* Here is an example with string form, where the requests parameters have already been concatenated
-         * into a query string. */
-//        out.println("String form example:");
-//        String queryString = "Service=AWSECommerceService&Version=2009-03-31&Operation=ItemLookup&ResponseGroup=Small&ItemId="
-//                + ITEM_ID;
-//        requestUrl = helper.sign(queryString);
-//        out.println("Request is \"" + requestUrl + "\"");
-//
-//        title = fetchTitle(requestUrl);
-//        out.println("Title is \"" + title + "\"");
-//        out.println();
-//        
-//            out.println("</body>");
-//            out.println("</html>");         
-} catch(Exception exception) {
-    System.out.println("Exception caught");
-}        
-        
-//try (PrintWriter out = response.getWriter()) {
-//    
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet SearchProcessing</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet SearchProcessing...</h1>");
-//            
-//        out.println("Map form example:");
-//        Map<String, String> params = new HashMap<String, String>();
-//        params.put("Service", "AWSECommerceService");
-//        params.put("Version", "2009-03-31");
-//        params.put("Operation", "ItemLookup");
-//        params.put("ItemId", ITEM_ID);
-//        params.put("ResponseGroup", "Small");
-//        params.put("AssociateTag", "XXXXXXXXXX");
-//
-//        requestUrl = helper.sign(params);
-//        out.println("Signed Request is \"" + requestUrl + "\"");
-//        out.println();
-//        title = fetchTitle(requestUrl);
-//        out.println("Signed Title is \"" + title + "\"");
-//        out.println();
-//        /* Here is an example with string form, where the requests parameters have already been concatenated
-//         * into a query string. */
-//        out.println("String form example:");
-//        String queryString = "Service=AWSECommerceService&Version=2009-03-31&Operation=ItemLookup&ResponseGroup=Small&ItemId="
-//                + ITEM_ID;
-//        requestUrl = helper.sign(queryString);
-//        out.println("Request is \"" + requestUrl + "\"");
-//
-//        title = fetchTitle(requestUrl);
-//        out.println("Title is \"" + title + "\"");
-//        out.println();
-//        
-//            out.println("</body>");
-//            out.println("</html>");         
-//} catch(Exception exception) {
-//    System.out.println("Exception caught");
-//}
     }
+    
+    public static String getChildContent(Element parent, String name /*, String missing, String empty*/) {
+        Element child = getChild(parent, name);
+        if (child != null) {
+            String content = (String) getContent(child);
+            return content;
+//          return missing;
+        } else {
+            return "";
+        }
+    }
+
+  public static Object getContent(Element element) {
+    NodeList nl = element.getChildNodes();
+    StringBuilder content = new StringBuilder();
+    for (int i = 0; i < nl.getLength(); i++) {
+      Node node = nl.item(i);
+      switch (node.getNodeType()) {
+      case Node.ELEMENT_NODE:
+        return node;
+      case Node.CDATA_SECTION_NODE:
+      case Node.TEXT_NODE:
+        content.append(node.getNodeValue());
+        break;
+      }
+    }
+    return content.toString().trim();
+  }
+
+  public static Element getChild(Element parent, String name) {
+    for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
+      if (child instanceof Element && name.equals(child.getNodeName())) {
+        return (Element) child;
+      }
+    }
+    return null;
+  }
 
     /*
      * Utility function to fetch the response from the service and extract the
@@ -311,17 +253,17 @@ try (PrintWriter out = response.getWriter()) {
         System.out.println("Debug statement A");
         String title = null;
         try {
-            System.out.println("Debug statement B");
+//            System.out.println("Debug statement B");
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            System.out.println("Debug statement C");
+//            System.out.println("Debug statement C");
             DocumentBuilder db = dbf.newDocumentBuilder();
-            System.out.println("Debug statement D");
+//            System.out.println("Debug statement D");
             Document doc = db.parse(requestUrl);
-            System.out.println("Debug statement E");
+//            System.out.println("Debug statement E");
             Node titleNode = doc.getElementsByTagName("Title").item(0);
-            System.out.println("Debug statement F");
+//            System.out.println("Debug statement F");
             title = titleNode.getTextContent();
-            System.out.println("Debug statement G");
+//            System.out.println("Debug statement G");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
