@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.wishlist;
+package com.mycompany.amazon;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -173,7 +182,57 @@ try (PrintWriter out = response.getWriter()) {
         params.put("SearchIndex", "Books");
 
         requestUrl = helper.sign(params);
-        out.println("<p><a href=\"" + requestUrl + "\">Click Here<//a> to view search results in XML");
+        out.println("<p><a href=\"" + requestUrl + "\">Click Here</a> to view search results in XML");
+        
+        DocumentBuilderFactory docIt = DocumentBuilderFactory.newInstance();
+        DocumentBuilder build = docIt.newDocumentBuilder();
+        Document doc = build.parse(requestUrl);
+        
+        
+//        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//        DocumentBuilder db = dbf.newDocumentBuilder();
+//        Document doc = db.parse(new URL(requestUrl).openStream());
+//        
+        doc.getDocumentElement().normalize();
+        NodeList itemList = doc.getElementsByTagName("Item");
+        
+        for (int i = 0; i < itemList.getLength(); i++) {
+            Element element = (Element) itemList.item(i);
+            //out.println("<p>" + element.getNodeName() + "</p>");
+            
+            NodeList urlList = element.getElementsByTagName("DetailPageURL");
+            NodeList titleList = element.getElementsByTagName("Title");
+            for (int j = 0; j < urlList.getLength(); j++) {
+                //Element e2 = (Element) innerTag.item(j);
+                Node urls = urlList.item(j);
+                Node titles = titleList.item(j);
+                String website = urls.getTextContent();
+                String data = titles.getTextContent();
+                out.println("<p>" + website + "</p>");
+                out.println("<p>" + data + "</p>");
+            }
+        }
+        
+        
+        
+        
+        /*File input = new File(requestUrl);
+        
+        DocumentBuilderFactory docIt = DocumentBuilderFactory.newInstance();
+        DocumentBuilder build = docIt.newDocumentBuilder();
+        Document doc = build.parse(input);
+        
+        doc.getDocumentElement().normalize();
+        NodeList itemList = doc.getElementsByTagName("Item");
+        
+        for (int i = 0; i < itemList.getLength(); i++) {
+            Element element = (Element) itemList.item(i);
+            out.println("<p>" + element.getNodeName().toUpperCase() + "</p>");
+            //out.println (element.getNodeName().toUpperCase());
+        }*/
+
+        
+        
 //        out.println("Signed Request is \"" + requestUrl + "\""); ////////////////////////////////////////////
 //        out.println();
         
