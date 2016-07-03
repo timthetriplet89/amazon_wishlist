@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.amazon;
+package com.mycompany.wishlist;
 
 import com.mycompany.wishlist.Item;
 import java.io.File;
