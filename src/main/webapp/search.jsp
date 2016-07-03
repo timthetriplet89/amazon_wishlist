@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,11 +17,16 @@
     <body>
         <h1>Add an item to your list</h1>
         
-        <form action='Search' method='post'>
-                <input type='text' name='search_box'>
-                <input type='submit' value='Search'>
-            </form>
+        <form action='SearchProcessing' method='post'>
+            <input type='text' name='search_box'>
+            <input type='submit' value='Search'>
+        </form>
         
         <a href='index.jsp'>View your list</a>
+        <c:forEach var="item" items="${listItems}">
+            <!--<p>${item.website}</p>-->
+            <p>${item.title}</p>
+        </c:forEach>
+        
     </body>
 </html>

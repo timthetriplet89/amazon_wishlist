@@ -5,6 +5,7 @@
  */
 package com.mycompany.amazon;
 
+import com.mycompany.wishlist.Item;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +30,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.mycompany.wishlist.SignedRequestsHelper;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -140,7 +145,7 @@ public class SearchProcessing extends HttpServlet {
      */
     private static final String ITEM_ID = "0545010225";
     
-    public static void searchExample(HttpServletRequest request, HttpServletResponse response) {
+    public void searchExample(HttpServletRequest request, HttpServletResponse response) {
         /*
          * Set up the signed requests helper 
          */
@@ -158,7 +163,7 @@ public class SearchProcessing extends HttpServlet {
          * Here is an example in map form, where the request parameters are stored in a map.
          */
         
-try (PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
     
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -190,16 +195,33 @@ try (PrintWriter out = response.getWriter()) {
         doc.getDocumentElement().normalize();
         NodeList itemList = doc.getElementsByTagName("Item");
         
+        
+        List<Item> listItems = new ArrayList<>();
+        
+        
         for (int i = 0; i < itemList.getLength(); i++) {
             Element element = (Element) itemList.item(i);
             
             String website = getChildContent(element, "DetailPageURL");
             Element itemAttributes = getChild(element, "ItemAttributes");
             String title = getChildContent(itemAttributes, "Title");
-            out.println("<p>" + website + "</p>");
-            out.println("<p>" + title + "</p>");
+            
+            Item item = new Item(website, title);
+            listItems.add(item);
+            
+            
+            //out.println("<p>" + website + "</p>");
+            //out.println("<p>" + title + "</p>");
             
         }
+         ServletContext sc = getServletContext();
+         RequestDispatcher rd = sc.getRequestDispatcher("/search.jsp");
+         request.setAttribute("listItems", listItems); 
+         rd.forward(request, response);
+        
+     //request.setAttribute("listItems", listItems);
+
+       // request.getRequestDispatcher("search.jsp").forward(request, response);
         
         
     } catch(Exception exception) {
