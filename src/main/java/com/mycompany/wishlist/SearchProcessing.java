@@ -180,7 +180,7 @@ public class SearchProcessing extends HttpServlet {
         params.put("Operation", "ItemSearch");
         params.put("ResponseGroup", "Small");     // What does this mean?
         params.put("AssociateTag", "XXXXXXXXXX");
-        params.put("Keywords", URLEncoder.encode(request.getParameter("searchBox"), "UTF-8"));
+        params.put("Keywords", URLEncoder.encode(request.getParameter("search_box"), "UTF-8"));
         params.put("ResponseGroup","Images,ItemAttributes,Offers");
         params.put("BrowseNode", "17");
         params.put("SearchIndex", "Books");
@@ -225,7 +225,8 @@ public class SearchProcessing extends HttpServlet {
         
         
     } catch(Exception exception) {
-        System.out.println("Exception caught");
+        System.out.println(exception.getMessage());
+//System.out.println("Exception caught");
     }        
         
     }

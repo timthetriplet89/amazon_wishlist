@@ -22,11 +22,13 @@
             <input type='submit' value='Search'>
         </form>
         
-        <a href='index.jsp'>View your list</a>
+        <br/>
         <c:forEach var="item" items="${listItems}">
-            <!--<p>${item.website}</p>-->
-            <p>${item.title}</p>
+            <a href="${item.link}">${item.title}</a>
+            <br />
         </c:forEach>
+        <br/>    
+        <a href='index.jsp'>View your list</a>    
         
     </body>
 </html>
