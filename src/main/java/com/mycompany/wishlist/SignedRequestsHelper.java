@@ -85,6 +85,10 @@ public class SignedRequestsHelper {
      * @param endpoint          Destination for the requests.
      * @param awsAccessKeyId    Your AWS Access Key ID
      * @param awsSecretKey      Your AWS Secret Key
+     * @return 
+     * @throws java.io.UnsupportedEncodingException 
+     * @throws java.security.NoSuchAlgorithmException 
+     * @throws java.security.InvalidKeyException 
      */
     public static SignedRequestsHelper getInstance(
             String endpoint, 

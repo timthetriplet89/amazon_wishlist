@@ -58,7 +58,7 @@ public class UserSignIn extends HttpServlet {
       String sql;
       sql = "SELECT id, name, username, password FROM users";
       ResultSet rs = stmt.executeQuery(sql);
-
+      
       //STEP 5: Extract data from result set
       while(rs.next()){
          //Retrieve by column name
@@ -68,13 +68,18 @@ public class UserSignIn extends HttpServlet {
          String password = rs.getString("password");
       }
       
+      
       PreparedStatement stmt2 = conn.prepareStatement("SELECT id, name, username, password FROM users WHERE username = ? ");
       stmt2.setString(1, user);
       rs = stmt2.executeQuery();
-      out.print(rs);
       
-      //when bad username, doesn't make it to rs.next loop
-      //rethink logic
+      if (!rs.next()){
+      String errorMessage = "The username and password don't match. Please try again!";
+         request.setAttribute("errorMessage", errorMessage);
+         request.getRequestDispatcher("/signin.jsp").forward(request, response);
+      }
+      
+      
       while(rs.next()){
          //Retrieve by column name
          int id  = rs.getInt("id");
