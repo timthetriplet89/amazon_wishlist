@@ -71,6 +71,7 @@ public class UserSignIn extends HttpServlet {
       PreparedStatement stmt2 = conn.prepareStatement("SELECT id, name, username, password FROM users WHERE username = ? ");
       stmt2.setString(1, user);
       rs = stmt2.executeQuery();
+      out.print(rs);
       
       //when bad username, doesn't make it to rs.next loop
       //rethink logic
