@@ -5,7 +5,6 @@
  */
 package com.mycompany.wishlist;
 
-import com.mycompany.wishlist.Item;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;

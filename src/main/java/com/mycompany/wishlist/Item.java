@@ -1,39 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.mycompany.wishlist;
 
-/**
- *
- * @author Ben
- */
 public class Item {
-    private String link;
-    private String title;
-    
-    public String getLink() {
-        return link;
-    }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
+	private int id;
+	private String title;
+	private String link;
+	
+	public Item(int id, String title, String link) {
+		this.setId(id);
+		this.setTitle(title);
+		this.setLink(link);
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    public Item(String link, String title) {
-        this.link = link;
-        this.title = title;
-    }
-    
-    
-    
+	private void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	private void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	private void setLink(String link) {
+		this.link = link;
+	}
+
+	public String toString() {
+		return "<a href=\"" + link + "\">" + title + "</a>";
+	}
+	
 }
