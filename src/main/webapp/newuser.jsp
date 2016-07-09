@@ -21,6 +21,8 @@
             <input type="submit" value="Create Account">
         </form>
         
+        <p class="error">${errorMessage}</p>
+        
         <p>Already have an account? <a href="signin.jsp">Click here</a> to login.</p>
         
     </body>

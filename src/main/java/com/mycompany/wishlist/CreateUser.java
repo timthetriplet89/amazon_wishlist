@@ -58,29 +58,48 @@ public class CreateUser extends HttpServlet {
 
       
       //get Username and Password
-      String name = request.getParameter("name");
-      String username = request.getParameter("username");
-      String password = request.getParameter("password");
+      String newname = request.getParameter("name");
+      String newusername = request.getParameter("username");
+      String newpassword = request.getParameter("password");
       
-      //STEP 4: Execute a query
+      //Get current usernames from database
+      stmt = conn.createStatement();
+      String sql;
+      sql = "SELECT username FROM users";
+      ResultSet rs = stmt.executeQuery(sql);
+
+      //STEP 5: Extract data from result set
+      while(rs.next()){
+         //Retrieve by column name
+         String username = rs.getString("username");
+         
+         //Check for duplicates
+         if (username.equals(newusername)){
+         String errorMessage = "The username is already in use. Please try again!";
+         request.setAttribute("errorMessage", errorMessage);
+         request.getRequestDispatcher("/newuser.jsp").forward(request, response);
+         }
+      }
+      
+      //Insert user into table
       PreparedStatement insertuser = conn.prepareStatement
         ("INSERT INTO users (name, username, password) VALUES (?, ?, ?)");
-      insertuser.setString(1, name);
-      insertuser.setString(2, username);
-      insertuser.setString(3, password);
+      insertuser.setString(1, newname);
+      insertuser.setString(2, newusername);
+      insertuser.setString(3, newpassword);
       insertuser.executeUpdate();
       
-      request.setAttribute("name", name);
-      request.setAttribute("username", username);
-      request.setAttribute("password", password);
-      request.getSession().setAttribute("name", name);
+      request.setAttribute("newname", newname);
+      request.setAttribute("newusername", newusername);
+      request.setAttribute("newpassword", newpassword);
+      request.getSession().setAttribute("name", newname);
       request.getRequestDispatcher("/index.jsp").forward(request, response);
       
       
       //STEP 6: Clean-up environment
-      //rs.close();
+      rs.close();
       stmt.close();
-      //conn.close();
+      conn.close();
       
    }catch(SQLException se){
       //Handle errors for JDBC
