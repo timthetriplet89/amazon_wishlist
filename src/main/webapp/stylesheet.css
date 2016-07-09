@@ -5,7 +5,8 @@
 //cream #FFFDC2*/
 
 html{
-    background-color: #6DFA7E;
+    background-image: url("gift1.jpg");
+    background-repeat: no-repeat;
 }
 body {
     width: 650px;
@@ -31,10 +32,11 @@ ul li{
     color: red;
     font-weight: bold;
 }
-/*#user_list{
+#user_list{
+    width:250px;
     float:left;
 }
 #display_list{
-    float:left;
-    clear: none;
-}*/
+    margin-left:275px;
+    
+}

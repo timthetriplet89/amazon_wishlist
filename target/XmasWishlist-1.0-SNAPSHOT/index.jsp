@@ -46,9 +46,9 @@
             <br>
             <br>
             
-            <a href='search.jsp'>Click here to add items to your wish list</a>
+            
         </div><br>
-        
+        <p><a href='search.jsp'>Click here to add items to your wish list</a></p>
         <p>Brought to you by the awesomeness that is Team 4</p>
     </body>
 </html>

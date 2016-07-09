@@ -8,11 +8,17 @@ package com.mycompany.wishlist;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.*;
 
 /**
  *
@@ -21,29 +27,86 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "CreateUser", urlPatterns = {"/CreateUser"})
 public class CreateUser extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    //variable for Openshift connection
+        //String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+        //String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+        //String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+    
+    String errorMessage = "";
+    
+    //variables for Kami's local connection
+        String DBUSERNAME = "myUser";
+        String DBPASSWORD = "myPass";
+        String DBURL = "jdbc:mysql://localhost/north_pole";
+        
+        
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateUser</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateUser at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
+   java.sql.Connection conn = null;
+   Statement stmt = null;
+   try{
+      
+      //STEP 2: Register JDBC driver
+      Class.forName("com.mysql.jdbc.Driver");
+
+      //STEP 3: Open a connection
+      conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
+
+      
+      //get Username and Password
+      String name = request.getParameter("name");
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
+      
+      //STEP 4: Execute a query
+      PreparedStatement insertuser = conn.prepareStatement
+        ("INSERT INTO users (name, username, password) VALUES (?, ?, ?)");
+      insertuser.setString(1, name);
+      insertuser.setString(2, username);
+      insertuser.setString(3, password);
+      insertuser.executeUpdate();
+      
+      request.setAttribute("name", name);
+      request.setAttribute("username", username);
+      request.setAttribute("password", password);
+      request.getSession().setAttribute("name", name);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
+      
+      
+      //STEP 6: Clean-up environment
+      //rs.close();
+      stmt.close();
+      //conn.close();
+      
+   }catch(SQLException se){
+      //Handle errors for JDBC
+      se.printStackTrace();
+     out.println("error description1:" + (se.getMessage()));
+   }catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+      out.println("error description2:" + (e.getMessage()));
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se2){
+          out.println("error description3:" + (se2.getMessage()));
+      }// nothing we can do
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+         out.println("error description4:" + (se.getMessage()));
+      }//end finally try
+   }//end try
+            
         }
     }
 

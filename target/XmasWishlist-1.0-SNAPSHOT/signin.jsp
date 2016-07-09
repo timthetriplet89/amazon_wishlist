@@ -25,5 +25,8 @@
         </form>
         
         <p class="error">${errorMessage}</p>
+        
+        <p>Are you a new user? <a href="newuser.jsp">Click here</a> to create a new account.</p>
+        
     </body>
 </html>
