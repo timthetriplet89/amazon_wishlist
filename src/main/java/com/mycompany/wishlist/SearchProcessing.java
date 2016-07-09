@@ -197,7 +197,7 @@ public class SearchProcessing extends HttpServlet {
         
         List<Item> listItems = new ArrayList<>();
            
-        for (int i = 0; i < itemList.getLength(); i++) {
+        for (int i = 0; i < itemList.getLength() && i < 10; i++) {  // For all results:  i < itemList.getLength()
             
             Element element = (Element) itemList.item(i);
             
