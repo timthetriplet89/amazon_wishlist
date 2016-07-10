@@ -20,16 +20,16 @@ import javax.servlet.ServletContext;
 public class UserSignIn extends HttpServlet {
     
     //variable for Openshift connection
-        //String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-        //String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-        //String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+        String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+        String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+        String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
     
-    String errorMessage = "";
+        String errorMessage = "";
     
     //variables for Kami's local connection
-        String DBUSERNAME = "myUser";
-        String DBPASSWORD = "myPass";
-        String DBURL = "jdbc:mysql://localhost/north_pole";
+        //String DBUSERNAME = "myUser";
+        //String DBPASSWORD = "myPass";
+        //String DBURL = "jdbc:mysql://localhost/north_pole";
         
         
     
