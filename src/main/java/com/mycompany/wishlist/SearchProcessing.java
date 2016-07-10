@@ -25,7 +25,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.Element;import com.mycompany.wishlist.Item;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.mycompany.wishlist.SignedRequestsHelper;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+
 
 /**
  *
@@ -206,14 +207,15 @@ public class SearchProcessing extends HttpServlet {
             if (itemAttributes != null)
             {
                 String title = getChildContent(itemAttributes, "Title");                   
-                Item item = new Item (website, title);                                   
+                Item item = new Item (title, website);                                   
                 listItems.add(item);
             }
         }
           
          ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/search.jsp");
-         request.setAttribute("listItems", listItems); 
+         request.setAttribute("listItems", listItems);
+         request.getSession().setAttribute("listItems", listItems);
          rd.forward(request, response);                                         //  Go To Search.jsp... 
         
     } catch(Exception exception) {

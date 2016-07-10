@@ -1,14 +1,20 @@
+package com.mycompany.wishlist;
 
 public class Item {
 
 	private int id;
 	private String title;
 	private String link;
+        
+        public Item(String title, String link) {
+            this.setTitle(title);
+            this.setLink(link);
+        }
 	
 	public Item(int id, String title, String link) {
-		this.setId(id);
-		this.setTitle(title);
-		this.setLink(link);
+            this.setId(id);
+            this.setTitle(title);
+            this.setLink(link);
 	}
 
 	public int getId() {

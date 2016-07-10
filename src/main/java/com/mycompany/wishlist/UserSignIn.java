@@ -90,12 +90,14 @@ public class UserSignIn extends HttpServlet {
          
          
          if (username.equals(user) && password.equals(pass)){
-         request.setAttribute("id", id);
-         request.setAttribute("name", name);
-         request.setAttribute("username", username);
-         request.setAttribute("password", password);
-         request.getSession().setAttribute("name", name);
-         request.getRequestDispatcher("/index.jsp").forward(request, response);}
+            request.setAttribute("id", id);
+            request.setAttribute("name", name);
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getSession().setAttribute("name", name);
+            request.getSession().setAttribute("id", id);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+         }
          
          else {
          String errorMessage = "The username and password don't match. Please try again!";

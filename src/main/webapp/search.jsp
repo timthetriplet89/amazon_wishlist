@@ -21,12 +21,19 @@
             <input type='text' name='search_box'>
             <input type='submit' value='Search'>
         </form>
-        
         <br/>
-        <c:forEach var="item" items="${listItems}">
-            <a href="${item.link}">${item.title}</a>
-            <br />
-        </c:forEach>
+        
+        <form action="AddToWishlist" method="post">
+            <c:forEach var="item" items="${listItems}">
+
+                <a href="${item.link}">${item.title}</a>
+                <input type="checkbox" name="item[]"  />
+                <br />
+            </c:forEach>
+            <input type="submit" value="Add" />
+        </form>    
+            
+        
         <br/>    
         <a href='index.jsp'>View your list</a>    
         
