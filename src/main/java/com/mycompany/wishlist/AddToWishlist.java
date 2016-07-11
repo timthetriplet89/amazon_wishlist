@@ -74,14 +74,14 @@ public class AddToWishlist extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String[] values = request.getParameterValues("item");
+        String[] values = request.getParameterValues("items");
         
         List<Item> items = (List<Item>) request.getSession().getAttribute("listItems");
         Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));
         
         
         for (int i = 0; i < values.length; i++) {
-            Item temp = items.get(Integer.parseInt(values[i]));
+            Item temp = items.get(i);   //  Item temp = items.get(Integer.parseInt(values[i]));
             wishlist.addItem(temp.getTitle(), temp.getLink());
         }
         

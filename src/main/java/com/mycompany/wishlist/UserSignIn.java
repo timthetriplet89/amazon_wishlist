@@ -87,7 +87,11 @@ public class UserSignIn extends HttpServlet {
          String name = rs.getString("name");
          String username = rs.getString("username");
          String password = rs.getString("password");
-         
+
+//         out.println("id = " + id);                   // FOR DEBUGGING ONLY...
+//         out.println("name = " + name);
+//         out.println("username = " + username);
+//         out.println("password = " + password);
          
          if (username.equals(user) && password.equals(pass)){
             request.setAttribute("id", id);
@@ -106,7 +110,6 @@ public class UserSignIn extends HttpServlet {
          }
         
       }
-   
       
       //STEP 6: Clean-up environment
       rs.close();

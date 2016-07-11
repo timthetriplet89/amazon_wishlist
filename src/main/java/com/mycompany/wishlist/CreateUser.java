@@ -28,16 +28,16 @@ import java.sql.*;
 public class CreateUser extends HttpServlet {
 
     //variable for Openshift connection
-        //String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-        //String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-        //String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+        String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+        String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+        String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
     
     String errorMessage = "";
     
     //variables for Kami's local connection
-        String DBUSERNAME = "myUser";
-        String DBPASSWORD = "myPass";
-        String DBURL = "jdbc:mysql://localhost/north_pole";
+//        String DBUSERNAME = "myUser";
+//        String DBPASSWORD = "myPass";
+//        String DBURL = "jdbc:mysql://localhost/north_pole";
         
         
     
@@ -49,13 +49,16 @@ public class CreateUser extends HttpServlet {
    java.sql.Connection conn = null;
    Statement stmt = null;
    try{
+       
+       out.println("DBUSERNAME = " + DBUSERNAME);
+       out.println("DBPASSWORD = " + DBPASSWORD); 
+       out.println("DBURL = " + DBURL);
       
       //STEP 2: Register JDBC driver
       Class.forName("com.mysql.jdbc.Driver");
 
       //STEP 3: Open a connection
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
-
       
       //get Username and Password
       String newname = request.getParameter("name");
@@ -94,7 +97,6 @@ public class CreateUser extends HttpServlet {
       request.setAttribute("newpassword", newpassword);
       request.getSession().setAttribute("name", newname);
       request.getRequestDispatcher("/index.jsp").forward(request, response);
-      
       
       //STEP 6: Clean-up environment
       rs.close();
@@ -167,5 +169,4 @@ public class CreateUser extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
