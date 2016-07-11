@@ -7,6 +7,11 @@ package com.mycompany.wishlist;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -77,17 +82,107 @@ public class AddToWishlist extends HttpServlet {
         String[] values = request.getParameterValues("items");
         
         List<Item> items = (List<Item>) request.getSession().getAttribute("listItems");
-        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));
         
+//        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
+//        for (int i = 0; i < values.length; i++) {
+//            Item temp = items.get(i);   //  Item temp = items.get(Integer.parseInt(values[i]));
+//            wishlist.addItem(temp.getTitle(), temp.getLink());
+//        }
         
+         //variable for Openshift connection
+        String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+        String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+        String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+        
+        try (PrintWriter out = response.getWriter()) {
+            
+   java.sql.Connection conn = null;
+   Statement stmt = null;
+   try{
+      
+      //STEP 2: Register JDBC driver
+      Class.forName("com.mysql.jdbc.Driver");
+
+      //STEP 3: Open a connection
+      conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
+      
+      //        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
         for (int i = 0; i < values.length; i++) {
             Item temp = items.get(i);   //  Item temp = items.get(Integer.parseInt(values[i]));
-            wishlist.addItem(temp.getTitle(), temp.getLink());
+//            wishlist.addItem(temp.getTitle(), temp.getLink());
         }
-        
+      
+      //get Username and Password
+//      String newname = request.getParameter("name");
+//      String newusername = request.getParameter("username");
+//      String newpassword = request.getParameter("password");
+      
+      //Get current usernames from database
+      stmt = conn.createStatement();
+      String sql;
+      sql = "SELECT username FROM users";
+      ResultSet rs = stmt.executeQuery(sql);
+
+      //STEP 5: Extract data from result set
+      while(rs.next()){
+         //Retrieve by column name
+         String username = rs.getString("username");
+         
+         //Check for duplicates
+         if (username.equals(newusername)){
+         String errorMessage = "The username is already in use. Please try again!";
+         request.setAttribute("errorMessage", errorMessage);
+         request.getRequestDispatcher("/newuser.jsp").forward(request, response);
+         }
+      }
+      
+      //Insert user into table
+      PreparedStatement insertuser = conn.prepareStatement
+        ("INSERT INTO users (name, username, password) VALUES (?, ?, ?)");
+      insertuser.setString(1, newname);
+      insertuser.setString(2, newusername);
+      insertuser.setString(3, newpassword);
+      insertuser.executeUpdate();
+      
+      request.setAttribute("newname", newname);
+      request.setAttribute("newusername", newusername);
+      request.setAttribute("newpassword", newpassword);
+      request.getSession().setAttribute("name", newname);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
+      
+      //STEP 6: Clean-up environment
+      rs.close();
+      stmt.close();
+      conn.close();
+      
+   }catch(SQLException se){
+      //Handle errors for JDBC
+      se.printStackTrace();
+     out.println("error description1:" + (se.getMessage()));
+   }catch(Exception e){
+      //Handle errors for Class.forName
+      e.printStackTrace();
+      out.println("error description2:" + (e.getMessage()));
+   }finally{
+      //finally block used to close resources
+      try{
+         if(stmt!=null)
+            conn.close();
+      }catch(SQLException se2){
+          out.println("error description3:" + (se2.getMessage()));
+      }// nothing we can do
+      try{
+         if(conn!=null)
+            conn.close();
+      }catch(SQLException se){
+         se.printStackTrace();
+         out.println("error description4:" + (se.getMessage()));
+      }//end finally try
+   }//end try
+            
+        }
+
         request.getSession().removeAttribute("listItems");
-        
-        
         processRequest(request, response);
     }
 
