@@ -81,7 +81,7 @@ public class AddToWishlist extends HttpServlet {
         Integer id = (Integer) request.getSession().getAttribute("id");
         String[] values = request.getParameterValues("items");
         
-        List<Item> items = (List<Item>) request.getSession().getAttribute("listItems");
+        List<Item> listItems = (List<Item>) request.getSession().getAttribute("listItems");
         
 //        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
 //        for (int i = 0; i < values.length; i++) {
@@ -105,37 +105,60 @@ public class AddToWishlist extends HttpServlet {
 
                //STEP 3: Open a connection
                conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
-
+               PreparedStatement insertuser = conn.prepareStatement("INSERT INTO items (name, url) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);  // SOURCE:  http://stackoverflow.com/questions/7162989/sqlexception-generated-keys-not-requested-mysql              
+               
                //        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
                  for (int i = 0; i < values.length; i++) {
+                     out.println("Error A");
+                     Item item = listItems.get(i);   // ASSUMPTION - VALUES ARRAY FOR CHECK BOXES FROM SEARCH RESULTS FORM (ON SEARCH.JSP) CORRESPONDS ONE TO ONE WITH THE LISTITEMS ATTRIBUTE 
+                     //  Item temp = items.get(Integer.parseInt(values[i]));
+                     out.println("Error B");
                      
-                     Item temp = items.get(i);   //  Item temp = items.get(Integer.parseInt(values[i]));
-                     
-                     PreparedStatement insertuser = conn.prepareStatement("INSERT INTO items (user_id, item_id) VALUES (?, ?)");
-                     
-                     insertuser.setString(1, id);
-                     insertuser.setString(2, newusername);
+                     out.println("Error C");
+                     insertuser.setString(1, item.getTitle());
+                     out.println("Error D");
+                     insertuser.setString(2, item.getLink());
+                     out.println("Error E");
                      insertuser.executeUpdate();
+                     out.println("Error F");
+                     ResultSet rs = insertuser.getGeneratedKeys();    //  http://stackoverflow.com/questions/5513180/java-preparedstatement-retrieving-last-inserted-id
+                     out.println("Error G");
+                     Integer last_inserted_id = new Integer(0);
+                     if(rs.next())   
+                     out.println("Error H");
+                     {
+                         out.println("Error I");
+                         last_inserted_id = rs.getInt(1);
+                     }
                      
-                     PreparedStatement insertuser = conn.prepareStatement("INSERT INTO items (user_id, item_id) VALUES (?, ?)");
+                     out.println("Error J");
+                     insertuser = conn.prepareStatement("INSERT INTO user_items (user_id, item_id) VALUES (?, ?)");
                      
-                     insertuser.setString(1, id);
-                     insertuser.setString(2, newusername);
+                     out.println("Error K");
+                     insertuser.setString(1, id.toString());
+                     out.println("Error L");
+                     insertuser.setString(2, last_inserted_id.toString());
+                     out.println("Error M");
                      insertuser.executeUpdate();
-                     
+                     out.println("Error N");
+                     out.println("Error .");
+                     out.println("Error .");
          //            wishlist.addItem(temp.getTitle(), temp.getLink());
                  }
-
+//                 rs.close();
+//                 stmt.close();
+//                 conn.close();
+                
                //get Username and Password
          //      String newname = request.getParameter("name");
          //      String newusername = request.getParameter("username");
          //      String newpassword = request.getParameter("password");
 
-               //Get current usernames from database
-               stmt = conn.createStatement();
-               String sql;
-               sql = "SELECT username FROM users";
-               ResultSet rs = stmt.executeQuery(sql);
+//               //Get current usernames from database
+//               stmt = conn.createStatement();
+//               String sql;
+//               sql = "SELECT username FROM users";
+//               ResultSet rs = stmt.executeQuery(sql);
 
                 //STEP 5: Extract data from result set
 //                while(rs.next()){
@@ -165,9 +188,7 @@ public class AddToWishlist extends HttpServlet {
 //                request.getRequestDispatcher("/index.jsp").forward(request, response);
 
                 //STEP 6: Clean-up environment
-                rs.close();
-                stmt.close();
-                conn.close();
+//                rs.close();
 
              }catch(SQLException se){
                 //Handle errors for JDBC
