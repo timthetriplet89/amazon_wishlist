@@ -39,6 +39,7 @@ public class AddToWishlist extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -83,12 +84,6 @@ public class AddToWishlist extends HttpServlet {
         
         List<Item> listItems = (List<Item>) request.getSession().getAttribute("listItems");
         
-//        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
-//        for (int i = 0; i < values.length; i++) {
-//            Item temp = items.get(i);   //  Item temp = items.get(Integer.parseInt(values[i]));
-//            wishlist.addItem(temp.getTitle(), temp.getLink());
-//        }
-        
          //variable for Openshift connection
         String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
         String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
@@ -109,87 +104,28 @@ public class AddToWishlist extends HttpServlet {
                
                //        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
                  for (int i = 0; i < values.length; i++) {
-                     out.println("Error A");
                      Item item = listItems.get(i);   // ASSUMPTION - VALUES ARRAY FOR CHECK BOXES FROM SEARCH RESULTS FORM (ON SEARCH.JSP) CORRESPONDS ONE TO ONE WITH THE LISTITEMS ATTRIBUTE 
                      //  Item temp = items.get(Integer.parseInt(values[i]));
-                     out.println("Error B");
-                     
-                     out.println("Error C");
+
                      insertuser.setString(1, item.getTitle());
-                     out.println("Error D");
                      insertuser.setString(2, item.getLink());
-                     out.println("Error E");
                      insertuser.executeUpdate();
-                     out.println("Error F");
                      ResultSet rs = insertuser.getGeneratedKeys();    //  http://stackoverflow.com/questions/5513180/java-preparedstatement-retrieving-last-inserted-id
-                     out.println("Error G");
                      Integer last_inserted_id = new Integer(0);
                      if(rs.next())   
-                     out.println("Error H");
                      {
-                         out.println("Error I");
                          last_inserted_id = rs.getInt(1);
                      }
-                     
-                     out.println("Error J");
                      insertuser = conn.prepareStatement("INSERT INTO user_items (user_id, item_id) VALUES (?, ?)");
-                     
-                     out.println("Error K");
                      insertuser.setString(1, id.toString());
-                     out.println("Error L");
                      insertuser.setString(2, last_inserted_id.toString());
-                     out.println("Error M");
                      insertuser.executeUpdate();
-                     out.println("Error N");
-                     out.println("Error .");
-                     out.println("Error .");
          //            wishlist.addItem(temp.getTitle(), temp.getLink());
                  }
-//                 rs.close();
-//                 stmt.close();
-//                 conn.close();
-                
-               //get Username and Password
-         //      String newname = request.getParameter("name");
-         //      String newusername = request.getParameter("username");
-         //      String newpassword = request.getParameter("password");
-
-//               //Get current usernames from database
-//               stmt = conn.createStatement();
-//               String sql;
-//               sql = "SELECT username FROM users";
-//               ResultSet rs = stmt.executeQuery(sql);
-
-                //STEP 5: Extract data from result set
-//                while(rs.next()){
-//                   //Retrieve by column name
-//                   String username = rs.getString("username");
-//
-//                   //Check for duplicates
-//                   if (username.equals(newusername)){
-//                   String errorMessage = "The username is already in use. Please try again!";
-//                   request.setAttribute("errorMessage", errorMessage);
-//                   request.getRequestDispatcher("/newuser.jsp").forward(request, response);
-//                   }
-//                }
-
-                //Insert user into table
-//                PreparedStatement insertuser = conn.prepareStatement
-//                  ("INSERT INTO users (name, username, password) VALUES (?, ?, ?)");
-//                insertuser.setString(1, newname);
-//                insertuser.setString(2, newusername);
-//                insertuser.setString(3, newpassword);
-//                insertuser.executeUpdate();
-
-//                request.setAttribute("newname", newname);
-//                request.setAttribute("newusername", newusername);
-//                request.setAttribute("newpassword", newpassword);
-//                request.getSession().setAttribute("name", newname);
-//                request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-                //STEP 6: Clean-up environment
-//                rs.close();
-
+                 
+                 request.getSession().removeAttribute("listItems");
+                 request.getRequestDispatcher("/itemAddedConfirmation.jsp").forward(request, response);
+                 
              }catch(SQLException se){
                 //Handle errors for JDBC
                 se.printStackTrace();
@@ -218,8 +154,8 @@ public class AddToWishlist extends HttpServlet {
             
         }
 
-        request.getSession().removeAttribute("listItems");
-        processRequest(request, response);
+
+//        processRequest(request, response);
     }
 
     /**

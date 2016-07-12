@@ -24,12 +24,11 @@
         <br/>
         
         <form action="AddToWishlist" method="post">
-            <c:forEach var="item" items="${listItems}">
-
+            <c:forEach var="item" items="${listItems}">                
+                <input type="checkbox" name="items" value="${item.title}" />    <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="${item.link}">${item.title}</a>
-                <input type="checkbox" name="items" value="${item.title}" />     <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
+                <br />                
                 <!--<input type="checkbox" name="item[]"  />-->
-                <br />
             </c:forEach>
             <input type="submit" value="Add" />
         </form>    

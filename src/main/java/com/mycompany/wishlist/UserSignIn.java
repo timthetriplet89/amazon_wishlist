@@ -14,8 +14,6 @@ import java.sql.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
-
-
 @WebServlet(name = "UserSignIn", urlPatterns = {"/UserSignIn"})
 public class UserSignIn extends HttpServlet {
     
@@ -30,8 +28,6 @@ public class UserSignIn extends HttpServlet {
         //String DBUSERNAME = "myUser";
         //String DBPASSWORD = "myPass";
         //String DBURL = "jdbc:mysql://localhost/north_pole";
-        
-        
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,7 +43,6 @@ public class UserSignIn extends HttpServlet {
 
       //STEP 3: Open a connection
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
-
       
       //get Username and Password
       String user = request.getParameter("username");
@@ -80,18 +75,12 @@ public class UserSignIn extends HttpServlet {
           rs.beforeFirst();
       }
 
-
       while(rs.next()){
          //Retrieve by column name
          int id  = rs.getInt("id");
          String name = rs.getString("name");
          String username = rs.getString("username");
          String password = rs.getString("password");
-
-//         out.println("id = " + id);                   // FOR DEBUGGING ONLY...
-//         out.println("name = " + name);
-//         out.println("username = " + username);
-//         out.println("password = " + password);
          
          if (username.equals(user) && password.equals(pass)){
             request.setAttribute("id", id);
@@ -108,7 +97,6 @@ public class UserSignIn extends HttpServlet {
          request.setAttribute("errorMessage", errorMessage);
          request.getRequestDispatcher("/signin.jsp").forward(request, response);
          }
-        
       }
       
       //STEP 6: Clean-up environment
@@ -140,7 +128,6 @@ public class UserSignIn extends HttpServlet {
          out.println("error description4:" + (se.getMessage()));
       }//end finally try
    }//end try
-            
         }
     }
 
