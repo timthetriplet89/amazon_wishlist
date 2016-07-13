@@ -4,11 +4,13 @@
 <html>
     <html>
     <head>
+        <link rel="icon" type="image/icon" href="logo.png">
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
         <title>Christmas Wish List</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
+        <img src="logo.png" alt="Christmas Wishlist" id="logo">
         <h1>Dear Santa,</h1>
         <h2>All I want for Christmas is a Red Ryder BB gun.</h2>
         
@@ -26,7 +28,7 @@
                 <li>Dad</li>
                 <li>Sally</li>
                 <li>John Bob</li>
-                <li>Add a friend</li><!--This will be a link to add a new user connection-->
+                <li><a href="friendsearch.jsp">Add a friend</a></li>
             </ul>
         </div><br>
         

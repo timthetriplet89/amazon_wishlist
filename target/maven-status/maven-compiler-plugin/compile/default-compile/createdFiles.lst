@@ -1,7 +1,0 @@
-com\mycompany\wishlist\Connection.class
-com\mycompany\wishlist\Item.class
-com\mycompany\wishlist\ItemLookupSample.class
-com\mycompany\wishlist\SearchProcessing.class
-com\mycompany\wishlist\CreateUser.class
-com\mycompany\wishlist\UserSignIn.class
-com\mycompany\wishlist\SignedRequestsHelper.class

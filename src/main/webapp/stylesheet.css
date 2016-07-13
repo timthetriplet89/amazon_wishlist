@@ -31,6 +31,14 @@ ul li{
     list-style-type: none;
 }
 
+#logo{
+    display: inline-block;
+    float: left;
+    //margin-left: auto;
+    //margin-right: auto;
+    height: 50px;
+}
+
 .error{
     color: red;
     font-weight: bold;

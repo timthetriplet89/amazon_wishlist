@@ -5,7 +5,6 @@
  */
 package com.mycompany.wishlist;
 
-import com.mycompany.wishlist.Item;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,7 +25,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.Element;import com.mycompany.wishlist.Item;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.mycompany.wishlist.SignedRequestsHelper;
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+
 
 /**
  *
@@ -54,17 +54,10 @@ public class SearchProcessing extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchProcessing</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchProcessing at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
         }
     }
 
@@ -164,7 +157,6 @@ public class SearchProcessing extends HttpServlet {
          */
         
         try (PrintWriter out = response.getWriter()) {
-    
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -172,21 +164,21 @@ public class SearchProcessing extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet SearchProcessing...</h1>");
-            
-//        out.println("Map form example:");
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("Service", "AWSECommerceService");
-//        params.put("Version", "2009-03-31");
         params.put("Operation", "ItemSearch");
         params.put("ResponseGroup", "Small");     // What does this mean?
         params.put("AssociateTag", "XXXXXXXXXX");
         params.put("Keywords", URLEncoder.encode(request.getParameter("search_box"), "UTF-8"));
         params.put("ResponseGroup","Images,ItemAttributes,Offers");
-        params.put("BrowseNode", "17");
-        params.put("SearchIndex", "Books");
+        params.put("SearchIndex", "Blended");                       // FOR ALL SEARCH RESULTS
+//        params.put("BrowseNode", "17");       // FOR BOOKS ONLY
+//        params.put("SearchIndex", "Books");   // FOR BOOKS ONLY
+//        params.put("Version", "2009-03-31");
 
         String requestUrl = helper.sign(params);
-        out.println("<p><a href=\"" + requestUrl + "\">Click Here</a> to view search results in XML");
+        out.println("<p><a href=\"" + requestUrl + "\">Click Here</a> to view search results in XML");   // XML OUTPUT
         
         DocumentBuilderFactory docIt = DocumentBuilderFactory.newInstance();
         DocumentBuilder build = docIt.newDocumentBuilder();
@@ -195,53 +187,48 @@ public class SearchProcessing extends HttpServlet {
         doc.getDocumentElement().normalize();
         NodeList itemList = doc.getElementsByTagName("Item");
         
-        
         List<Item> listItems = new ArrayList<>();
-        
-        
-        for (int i = 0; i < itemList.getLength(); i++) {
+           
+        for (int i = 0; i < itemList.getLength() && i < 10; i++) {  // For all results:  i < itemList.getLength()
+            
             Element element = (Element) itemList.item(i);
             
             String website = getChildContent(element, "DetailPageURL");
             Element itemAttributes = getChild(element, "ItemAttributes");
-            String title = getChildContent(itemAttributes, "Title");
             
-            Item item = new Item(website, title);
-            listItems.add(item);
-            
-            
-            //out.println("<p>" + website + "</p>");
-            //out.println("<p>" + title + "</p>");
-            
+            if (itemAttributes != null)
+            {
+                String title = getChildContent(itemAttributes, "Title");                   
+                Item item = new Item (title, website);                                   
+                listItems.add(item);
+            }
         }
-         ServletContext sc = getServletContext();
+          
+         ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/search.jsp");
-         request.setAttribute("listItems", listItems); 
-         rd.forward(request, response);
-        
-     //request.setAttribute("listItems", listItems);
-
-       // request.getRequestDispatcher("search.jsp").forward(request, response);
-        
+         request.setAttribute("listItems", listItems);
+         request.getSession().setAttribute("listItems", listItems);
+         rd.forward(request, response);                                         //  Go To Search.jsp... 
         
     } catch(Exception exception) {
         System.out.println(exception.getMessage());
-//System.out.println("Exception caught");
+        //System.out.println("Exception caught");
     }        
         
     }
     
+  // From http://www.java2s.com/Code/Java/XML/Getchildfromanelementbyname.htm
     public static String getChildContent(Element parent, String name /*, String missing, String empty*/) {
         Element child = getChild(parent, name);
         if (child != null) {
             String content = (String) getContent(child);
             return content;
-//          return missing;
         } else {
-            return "";
+            return "";        
         }
     }
 
+  // From http://www.java2s.com/Code/Java/XML/Getchildfromanelementbyname.htm
   public static Object getContent(Element element) {
     NodeList nl = element.getChildNodes();
     StringBuilder content = new StringBuilder();
@@ -259,6 +246,7 @@ public class SearchProcessing extends HttpServlet {
     return content.toString().trim();
   }
 
+  // From http://www.java2s.com/Code/Java/XML/Getchildfromanelementbyname.htm
   public static Element getChild(Element parent, String name) {
     for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
       if (child instanceof Element && name.equals(child.getNodeName())) {
@@ -271,6 +259,7 @@ public class SearchProcessing extends HttpServlet {
     /*
      * Utility function to fetch the response from the service and extract the
      * title from the XML.
+     *    From http://www.java2s.com/Code/Java/XML/Getchildfromanelementbyname.htm
      */
     private static String fetchTitle(String requestUrl) {
         System.out.println("Debug statement A");

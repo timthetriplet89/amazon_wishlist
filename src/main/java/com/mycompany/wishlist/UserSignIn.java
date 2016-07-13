@@ -14,24 +14,20 @@ import java.sql.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
-
-
 @WebServlet(name = "UserSignIn", urlPatterns = {"/UserSignIn"})
 public class UserSignIn extends HttpServlet {
     
     //variable for Openshift connection
-        //String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-        //String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-        //String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+        String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+        String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+        String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
     
-    String errorMessage = "";
+        String errorMessage = "";
     
     //variables for Kami's local connection
-        String DBUSERNAME = "myUser";
-        String DBPASSWORD = "myPass";
-        String DBURL = "jdbc:mysql://localhost/north_pole";
-        
-        
+        //String DBUSERNAME = "myUser";
+        //String DBPASSWORD = "myPass";
+        //String DBURL = "jdbc:mysql://localhost/north_pole";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,7 +43,6 @@ public class UserSignIn extends HttpServlet {
 
       //STEP 3: Open a connection
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
-
       
       //get Username and Password
       String user = request.getParameter("username");
@@ -80,7 +75,6 @@ public class UserSignIn extends HttpServlet {
           rs.beforeFirst();
       }
 
-
       while(rs.next()){
          //Retrieve by column name
          int id  = rs.getInt("id");
@@ -88,23 +82,22 @@ public class UserSignIn extends HttpServlet {
          String username = rs.getString("username");
          String password = rs.getString("password");
          
-         
          if (username.equals(user) && password.equals(pass)){
-         request.setAttribute("id", id);
-         request.setAttribute("name", name);
-         request.setAttribute("username", username);
-         request.setAttribute("password", password);
-         request.getSession().setAttribute("name", name);
-         request.getRequestDispatcher("/index.jsp").forward(request, response);}
+            request.setAttribute("id", id);
+            request.setAttribute("name", name);
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getSession().setAttribute("name", name);
+            request.getSession().setAttribute("id", id);
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+         }
          
          else {
          String errorMessage = "The username and password don't match. Please try again!";
          request.setAttribute("errorMessage", errorMessage);
          request.getRequestDispatcher("/signin.jsp").forward(request, response);
          }
-        
       }
-   
       
       //STEP 6: Clean-up environment
       rs.close();
@@ -135,7 +128,6 @@ public class UserSignIn extends HttpServlet {
          out.println("error description4:" + (se.getMessage()));
       }//end finally try
    }//end try
-            
         }
     }
 

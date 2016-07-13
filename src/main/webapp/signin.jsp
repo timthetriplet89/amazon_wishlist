@@ -9,11 +9,14 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <link rel="icon" type="image/icon" href="logo.png">
         <title>Christmas Wish List</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
+        <img src="logo.png" alt="Christmas Wishlist" id="logo">
         <h1>Sign In Page</h1>
+        
         
        
         <p>Please sign in below to access your wish list.</p>
