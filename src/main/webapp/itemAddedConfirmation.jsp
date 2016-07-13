@@ -13,8 +13,12 @@
         <title>Confirmation</title>
     </head>
     <body>
+<<<<<<< HEAD
         <img src="logo.png" alt="Christmas Wishlist" id="logo">
         <h2>Selected items were added to your wishlist.</h2>
+=======
+        <h1>Selected items were added to your wishlist.</h1>
+>>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
         
         <p>Go back <a href="search.jsp">to keep searching and adding to your list.</a></p>
     </body>

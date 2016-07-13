@@ -1,38 +1,53 @@
-
-
-package com.mycompany.wishlist;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.System;
-import java.sql.*;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 
-@WebServlet(name = "UserSignIn", urlPatterns = {"/UserSignIn"})
-public class UserSignIn extends HttpServlet {
-    
+/**
+ *
+ * @author timth
+ */
+@WebServlet(urlPatterns = {"/LoadWishlist"})
+public class LoadWishlist extends HttpServlet {
+
     //variable for Openshift connection
-        String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-        String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-        String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+    String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+    String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+    String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
+      
     
-        String errorMessage = "";
-    
-    //variables for Kami's local connection
-        //String DBUSERNAME = "myUser";
-        //String DBPASSWORD = "myPass";
-        //String DBURL = "jdbc:mysql://localhost/north_pole";
-    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        
+try (PrintWriter out = response.getWriter()) {
             
    java.sql.Connection conn = null;
    Statement stmt = null;
@@ -44,64 +59,31 @@ public class UserSignIn extends HttpServlet {
       //STEP 3: Open a connection
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
       
-      //get Username and Password
-      String user = request.getParameter("username");
-      String pass = request.getParameter("password");
-      
+      // get id of logged-in user
+      String id = (String)request.getSession().getAttribute("id");
+            
       //STEP 4: Execute a query
       stmt = conn.createStatement();
-      String sql;
-      sql = "SELECT id, name, username, password FROM users";
-      ResultSet rs = stmt.executeQuery(sql);
-
-      //STEP 5: Extract data from result set
-      while(rs.next()){
-         //Retrieve by column name
-         int id  = rs.getInt("id");
-         String name = rs.getString("name");
-         String username = rs.getString("username");
-         String password = rs.getString("password");
-      }
-      
-      PreparedStatement stmt2 = conn.prepareStatement("SELECT id, name, username, password FROM users WHERE username = ? ");
-      stmt2.setString(1, user);
-      rs = stmt2.executeQuery();
+      PreparedStatement stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
+      stmt2.setString(1, id);
+      ResultSet rs = stmt2.executeQuery();
 
       if (!rs.next()){
-         String errorMessage = "The username and password don't match. Please try again!";
+         String errorMessage = "Error- you currently do not have any items in your wishlist.";
          request.setAttribute("errorMessage", errorMessage);
-         request.getRequestDispatcher("/signin.jsp").forward(request, response);
+         request.getRequestDispatcher("/search.jsp").forward(request, response);
       } else {
           rs.beforeFirst();
       }
-
+      
+      List<Integer> listItemID = new ArrayList<Integer>();
+      int item_id;
+      
       while(rs.next()){
          //Retrieve by column name
-         int id  = rs.getInt("id");
-         String name = rs.getString("name");
-         String username = rs.getString("username");
-         String password = rs.getString("password");
-         
-         if (username.equals(user) && password.equals(pass)){
-            request.setAttribute("id", id);
-            request.setAttribute("name", name);
-            request.setAttribute("username", username);
-            request.setAttribute("password", password);
-            request.getSession().setAttribute("name", name);
-            request.getSession().setAttribute("id", id);
-<<<<<<< HEAD
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-=======
-            response.sendRedirect("/LoadWishlist");    
-//            request.getRequestDispatcher("/.jsp").forward(request, response);
->>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
-         }
-         
-         else {
-         String errorMessage = "The username and password don't match. Please try again!";
-         request.setAttribute("errorMessage", errorMessage);
-         request.getRequestDispatcher("/signin.jsp").forward(request, response);
-         }
+         item_id  = rs.getInt("item_id");
+         listItemID.add(item_id);
+         out.println("item_id: " + item_id);
       }
       
       //STEP 6: Clean-up environment
