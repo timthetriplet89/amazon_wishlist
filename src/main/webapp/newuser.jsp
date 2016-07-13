@@ -6,7 +6,10 @@
 <html>
     <head>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <link rel="icon" type="image/icon" href="logo.png">
+=======
+>>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
 =======
 >>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
@@ -15,7 +18,10 @@
     </head>
     <body>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <img src="logo.png" alt="Christmas Wishlist" id="logo">
+=======
+>>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
 =======
 >>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
         <h1>Sign Up Page</h1>

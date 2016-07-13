@@ -90,7 +90,12 @@ public class UserSignIn extends HttpServlet {
             request.getSession().setAttribute("name", name);
             request.getSession().setAttribute("id", id);
 <<<<<<< HEAD
+<<<<<<< HEAD
             request.getRequestDispatcher("/index.jsp").forward(request, response);
+=======
+            response.sendRedirect("/LoadWishlist");    
+//            request.getRequestDispatcher("/.jsp").forward(request, response);
+>>>>>>> d913741a4a6d11cf5434ee591ca16e537051ed64
 =======
             response.sendRedirect("/LoadWishlist");    
 //            request.getRequestDispatcher("/.jsp").forward(request, response);
