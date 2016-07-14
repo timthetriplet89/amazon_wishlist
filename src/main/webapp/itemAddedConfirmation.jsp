@@ -14,6 +14,7 @@
     </head>
     <body>
 
+
         <img src="logo.png" alt="Christmas Wishlist" id="logo">
         <h2>Selected items were added to your wishlist.</h2>
 

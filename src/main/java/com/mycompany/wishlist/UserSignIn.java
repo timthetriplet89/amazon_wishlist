@@ -16,6 +16,8 @@ import javax.servlet.ServletContext;
 
 
 
+
+
 @WebServlet(name = "UserSignIn", urlPatterns = {"/UserSignIn"})
 public class UserSignIn extends HttpServlet {
     
@@ -24,14 +26,15 @@ public class UserSignIn extends HttpServlet {
         String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
         String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
     
+
     String errorMessage = "";
+
     
     //variables for Kami's local connection
         //String DBUSERNAME = "myUser";
         //String DBPASSWORD = "myPass";
         //String DBURL = "jdbc:mysql://localhost/north_pole";
-        
-        
+
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -88,24 +91,26 @@ public class UserSignIn extends HttpServlet {
          String username = rs.getString("username");
          String password = rs.getString("password");
          
-         
+
          if (username.equals(user) && password.equals(pass)){
-         request.setAttribute("id", id);
-         request.setAttribute("name", name);
-         request.setAttribute("username", username);
-         request.setAttribute("password", password);
-         request.getSession().setAttribute("name", name);
-         request.getRequestDispatcher("/index.jsp").forward(request, response);}
+            request.setAttribute("id", id);
+            request.setAttribute("name", name);
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getSession().setAttribute("name", name);
+            request.getSession().setAttribute("id", id);
+            response.sendRedirect("/LoadWishlist");    
+//            request.getRequestDispatcher("/.jsp").forward(request, response);
+         }
+
          
          else {
          String errorMessage = "The username and password don't match. Please try again!";
          request.setAttribute("errorMessage", errorMessage);
          request.getRequestDispatcher("/signin.jsp").forward(request, response);
          }
-        
+
       }
-   
-      
       //STEP 6: Clean-up environment
       rs.close();
       stmt.close();
@@ -133,9 +138,10 @@ public class UserSignIn extends HttpServlet {
       }catch(SQLException se){
          se.printStackTrace();
          out.println("error description4:" + (se.getMessage()));
+           
       }//end finally try
    }//end try
-            
+
         }
     }
 
