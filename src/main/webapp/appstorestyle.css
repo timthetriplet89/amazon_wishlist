@@ -29,3 +29,21 @@ h1, h2, h3, a{
 
 }
 
+.ss{
+    height: 400px;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 3px #B20000;
+}
+
+#picnav{
+    width: 100px;
+    display: block;
+    margin: auto;
+}
+.w3-btn-floating{
+    color: #B20000;
+    margin: 0 auto;
+    font-size: 30px;
+}

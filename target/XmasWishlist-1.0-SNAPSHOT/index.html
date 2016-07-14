@@ -15,8 +15,36 @@
         <h4>Rated E for Everyone</h4>
         
         <div id="screenshots">
-            <!--This will hold screenshot pictures-->
+            <img src='screenshot1.jpg' class='ss'>
+            <img src='screenshot2.jpg' class='ss'>
+            <img src='screenshot3.jpg' class='ss'>
+            
+            <div id='picnav'>
+            <a class="w3-btn-floating" style="padding-right:30px;" onclick="plusDivs(-1)"> &#10094; </a>
+            <a class="w3-btn-floating" onclick="plusDivs(+1)"> &#10095; </a>
+            </div>
         </div>
+        
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("ss");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+</script>
+
         <p>Are you tired of getting all the wrong things for Christmas?
         Well we've got you covered this year! Our Christmas wishlist app
         tracks your Christmas wishlist and allows you to share it with friends
