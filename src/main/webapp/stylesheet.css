@@ -34,8 +34,6 @@ ul li{
 #logo{
     display: inline-block;
     float: left;
-    //margin-left: auto;
-    //margin-right: auto;
     height: 50px;
 }
 

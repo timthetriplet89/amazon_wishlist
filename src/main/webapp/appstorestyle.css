@@ -21,3 +21,11 @@ body{
 h1, h2, h3, a{
     color: #dimgray;
 }
+
+#logo{
+    display: inline-block;
+    float: left;
+    height: 50px;
+
+}
+

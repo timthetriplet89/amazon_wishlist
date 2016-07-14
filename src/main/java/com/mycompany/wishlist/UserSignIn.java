@@ -99,7 +99,7 @@ public class UserSignIn extends HttpServlet {
             request.setAttribute("password", password);
             request.getSession().setAttribute("name", name);
             request.getSession().setAttribute("id", id);
-            response.sendRedirect("/LoadWishlist");    
+            response.sendRedirect("LoadWishlist");    
 //            request.getRequestDispatcher("/.jsp").forward(request, response);
          }
 
