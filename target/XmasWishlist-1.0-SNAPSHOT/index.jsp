@@ -19,39 +19,26 @@
         <p>"You'll shoot your eye out, kid!"</p><br>
         
         <div id="user_list">
-            <c:forEach var="user" items="${connections}">                
-                <a href="LoadWishlist?id=${user.id}">${user.name}</a>
-            </c:forEach>
-            
-            
             <h2>${name}'s Friends</h2>
-            <ul>
-                <li>Mom</li>
-                <li>Dad</li>
-                <li>Sally</li>
-                <li>John Bob</li>
-                <li><a href="friendsearch.jsp">Add a friend</a></li>
-            </ul>
+            <c:forEach var="user" items="${connections}">                
+                <a href="LoadWishlist?id=${user.id}">${user.name}</a><br>
+            </c:forEach>
+            <a href="friendsearch.jsp">Add a friend</a><br>
+            
         </div><br>
         
+        
+        
         <div id="display_list">
+            <h2>${name}'s list</h2>
             
             <c:forEach var="item" items="${wishlist}">                
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="${item.link}">${item.title}</a><br>
             </c:forEach>            
                 
-                <br><br><br>    
                 
-            <h2>${name}'s list</h2>
-            <ul>
-                <li>Drum set</li>
-                <li>Drone</li>
-                <li>Barbie</li>
-            </ul>
             
-            <br>
-            <br>
             
             
         </div><br>

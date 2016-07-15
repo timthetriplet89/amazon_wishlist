@@ -19,6 +19,7 @@
         <h2>Selected items were added to your wishlist.</h2>
 
         
-        <p>Go back <a href="search.jsp">to keep searching and adding to your list.</a></p>
+        <p>Go back <a href="search.jsp">to keep searching and adding to your list.</a><br>
+        <a href='/LoadWishlist'>View your list</a></p>
     </body>
 </html>
