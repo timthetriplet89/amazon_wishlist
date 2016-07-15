@@ -123,10 +123,43 @@ try (PrintWriter out = response.getWriter()) {
 //           out.println("item_id: " + item_id);
         }
       }
+
+//get and display user's friend list
+      PreparedStatement userlist = conn.prepareStatement
+        ("SELECT users.id, users.name FROM users JOIN connections "
+                + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
+      userlist.setString(1, id);
+      ResultSet rsUserList = userlist.executeQuery();
+
+      if (!rs.next()){
+         String errorMessage = "You have no connections";
+         request.setAttribute("errorMessage", errorMessage);
+         request.getRequestDispatcher("/index.jsp").forward(request, response);
+      } else {
+          rs.beforeFirst();
+      }
+
+
+      while(rs.next()){
+         //Retrieve by column name
+         String userid  = rs.getString("users.id");
+         String authname = rs.getString("users.name");
+         
+         request.setAttribute("userid", userid);
+         request.setAttribute("authname", authname);
+         
+         out.print(authname);
+         
+      }
+      
+// prepared statement to return join of user ID and name      
+// SELECT users.id, users.name FROM users JOIN connections 
+//      ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?;
       
       ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
          request.setAttribute("wishlist", wishlist);
+         
          request.getSession().setAttribute("wishlist", wishlist);
          rd.forward(request, response);                                         //  Go To Index.jsp... 
       

@@ -21,7 +21,7 @@
         <div id="user_list">
             <h2>${name}'s Friends</h2>
             <c:forEach var="user" items="${connections}">                
-                <a href="LoadWishlist?id=${user.id}">${user.name}</a><br>
+                <a href="LoadWishlist?id=${userid}">${authname}</a><br>
             </c:forEach>
             <a href="friendsearch.jsp">Add a friend</a><br>
             
