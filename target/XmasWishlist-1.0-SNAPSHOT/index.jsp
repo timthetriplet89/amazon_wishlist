@@ -19,11 +19,11 @@
         <p>"You'll shoot your eye out, kid!"</p><br>
         
         <div id="user_list">
-            <!-- this will be a foreach statement connecting to database
-            and displaying each user as a link that has connected with the current 
-            user. Clicking on link will display other user's list in display_list
-            section and change the name in the session variable to show the new
-            user's list-->
+            <c:forEach var="user" items="${connections}">                
+                <a href="LoadWishlist?id=${user.id}">${user.name}</a>
+            </c:forEach>
+            
+            
             <h2>${name}'s Friends</h2>
             <ul>
                 <li>Mom</li>
@@ -35,9 +35,7 @@
         </div><br>
         
         <div id="display_list">
-            <!-- this will be a foreach statement connecting to database
-            and displaying each item saved to the user's list-->
-
+            
             <c:forEach var="item" items="${wishlist}">                
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="${item.link}">${item.title}</a>
@@ -45,8 +43,6 @@
                 
                 <br><br><br>    
                 
-            <!-- User name will be stored as session setting and will be populated
-            here from sesson variable -->
             <h2>${name}'s list</h2>
             <ul>
                 <li>Drum set</li>
