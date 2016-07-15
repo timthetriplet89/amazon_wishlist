@@ -38,7 +38,7 @@
             
             <c:forEach var="item" items="${wishlist}">                
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
-                <a href="${item.link}">${item.title}</a>
+                <a href="${item.link}">${item.title}</a><br>
             </c:forEach>            
                 
                 <br><br><br>    

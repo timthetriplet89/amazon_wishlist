@@ -52,7 +52,7 @@ try (PrintWriter out = response.getWriter()) {
             
    java.sql.Connection conn = null;
 //   Statement stmt = null;
-    PreparedStatement stmt2 = null;
+    PreparedStatement stmtGetIds = null;
    try{
       
       //STEP 2: Register JDBC driver
@@ -67,13 +67,14 @@ try (PrintWriter out = response.getWriter()) {
       //STEP 4: Execute a query -- Get the items in the user's wishlist, with a lookup using the user's id in the items_users table
 //      stmt = conn.createStatement();
 //      PreparedStatement stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
-      stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
-      stmt2.setString(1, id);
-      ResultSet rs = stmt2.executeQuery();
+      stmtGetIds = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
+      stmtGetIds.setString(1, id);
+      ResultSet rs = stmtGetIds.executeQuery();
       if (!rs.next()){
          String errorMessage = "Error- you currently do not have any items in your wishlist.";
+         out.println(errorMessage);
          request.setAttribute("errorMessage", errorMessage);
-         request.getRequestDispatcher("/search.jsp").forward(request, response);
+//         request.getRequestDispatcher("/search.jsp").forward(request, response);
       } else {
           rs.beforeFirst();
       }
@@ -85,34 +86,38 @@ try (PrintWriter out = response.getWriter()) {
          //Retrieve each item id
          item_id  = rs.getInt("item_id");
          listItemID.add(item_id);
-//         out.println("item_id: " + item_id);
+//         out.println("item_id: " + item_id + "<br>");
       }
       
 
       // Get the name and url for each item in the user's list 
       List<Item> wishlist = new ArrayList<>();
-      PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
+//      PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
       
+      out.println("listItemID.size() = " + listItemID.size());
       for (Integer i = 0; i < listItemID.size(); i++) {
       
-        stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
-        stmt3.setString(1, listItemID.get(i).toString()); 
-        ResultSet rs3 = stmt3.executeQuery();
-        if (!rs.next()){
+        PreparedStatement stmtWishlist = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
+        stmtWishlist.setString(1, listItemID.get(i).toString()); 
+        ResultSet rsWishlist = stmtWishlist.executeQuery();
+        if (!rsWishlist.next()){
            String errorMessage = "Error...";
+           out.println(errorMessage);
            request.setAttribute("errorMessage", errorMessage);
-           request.getRequestDispatcher("/search.jsp").forward(request, response);
+//           request.getRequestDispatcher("/search.jsp").forward(request, response);
         } else {
-            rs.beforeFirst();
+            rsWishlist.beforeFirst();
         }
         
         String itemName;
         String url;
 
-        while(rs.next()){
+        while(rsWishlist.next()){
            //Retrieve by column name
-           itemName = rs.getString("name");
-           url = rs.getString("url");
+           itemName = rsWishlist.getString("name");
+//           out.println("itemName = " + itemName);
+           url = rsWishlist.getString("url");
+//           out.println("url = " + url);
            Item item = new Item(itemName, url);
            wishlist.add(item);
 //           out.println("item_id: " + item_id);
@@ -123,7 +128,7 @@ try (PrintWriter out = response.getWriter()) {
          RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
          request.setAttribute("wishlist", wishlist);
          request.getSession().setAttribute("wishlist", wishlist);
-         rd.forward(request, response);                                         //  Go To Search.jsp... 
+         rd.forward(request, response);                                         //  Go To Index.jsp... 
       
       //////////////////////////////////////////
       
@@ -131,8 +136,8 @@ try (PrintWriter out = response.getWriter()) {
       //STEP 6: Clean-up environment
       rs.close();
 //      stmt.close();
-      stmt2.close();
-      stmt3.close();
+      stmtGetIds.close();
+//      stmt3.close();
       conn.close();
       
    }catch(SQLException se){
@@ -146,8 +151,8 @@ try (PrintWriter out = response.getWriter()) {
    }finally{
       //finally block used to close resources
       try{
-         if(stmt2!=null)
-            stmt2.close();
+         if(stmtGetIds!=null)
+            stmtGetIds.close();
       }catch(SQLException se2){
           out.println("error description3:" + (se2.getMessage()));
       }// nothing we can do
