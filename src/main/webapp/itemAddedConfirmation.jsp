@@ -20,6 +20,6 @@
 
         
         <p>Go back <a href="search.jsp">to keep searching and adding to your list.</a><br>
-        <a href='/LoadWishlist'>View your list</a></p>
+        <a href='LoadWishlist'>View your list</a></p>
     </body>
 </html>

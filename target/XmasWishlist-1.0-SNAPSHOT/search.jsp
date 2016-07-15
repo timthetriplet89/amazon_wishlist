@@ -37,7 +37,7 @@
             
         
         <br/>    
-        <a href='/LoadWishlist'>View your list</a>    
+        <a href='LoadWishlist'>View your list</a>    
         
     </body>
 </html>
