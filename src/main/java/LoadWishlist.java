@@ -72,8 +72,9 @@ try (PrintWriter out = response.getWriter()) {
       ResultSet rs = stmt2.executeQuery();
       if (!rs.next()){
          String errorMessage = "Error- you currently do not have any items in your wishlist.";
+         out.println(errorMessage);
          request.setAttribute("errorMessage", errorMessage);
-         request.getRequestDispatcher("/search.jsp").forward(request, response);
+//         request.getRequestDispatcher("/search.jsp").forward(request, response);
       } else {
           rs.beforeFirst();
       }
@@ -85,23 +86,25 @@ try (PrintWriter out = response.getWriter()) {
          //Retrieve each item id
          item_id  = rs.getInt("item_id");
          listItemID.add(item_id);
-//         out.println("item_id: " + item_id);
+         out.println("item_id: " + item_id + "<br>");
       }
       
 
       // Get the name and url for each item in the user's list 
       List<Item> wishlist = new ArrayList<>();
-      PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
+//      PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
       
+      out.println("listItemID.size() = " + listItemID.size());
       for (Integer i = 0; i < listItemID.size(); i++) {
       
-        stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
+        PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
         stmt3.setString(1, listItemID.get(i).toString()); 
         ResultSet rs3 = stmt3.executeQuery();
-        if (!rs.next()){
+        if (!rs3.next()){
            String errorMessage = "Error...";
+           out.println(errorMessage);
            request.setAttribute("errorMessage", errorMessage);
-           request.getRequestDispatcher("/search.jsp").forward(request, response);
+//           request.getRequestDispatcher("/search.jsp").forward(request, response);
         } else {
             rs.beforeFirst();
         }
@@ -112,7 +115,9 @@ try (PrintWriter out = response.getWriter()) {
         while(rs.next()){
            //Retrieve by column name
            itemName = rs.getString("name");
+           out.println("itemName = " + itemName);
            url = rs.getString("url");
+           out.println("url = " + url);
            Item item = new Item(itemName, url);
            wishlist.add(item);
 //           out.println("item_id: " + item_id);
@@ -120,10 +125,10 @@ try (PrintWriter out = response.getWriter()) {
       }
       
       ServletContext sc = getServletContext();      
-         RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
-         request.setAttribute("wishlist", wishlist);
-         request.getSession().setAttribute("wishlist", wishlist);
-         rd.forward(request, response);                                         //  Go To Search.jsp... 
+//         RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
+//         request.setAttribute("wishlist", wishlist);
+//         request.getSession().setAttribute("wishlist", wishlist);
+//         rd.forward(request, response);                                         //  Go To Index.jsp... 
       
       //////////////////////////////////////////
       
@@ -132,7 +137,7 @@ try (PrintWriter out = response.getWriter()) {
       rs.close();
 //      stmt.close();
       stmt2.close();
-      stmt3.close();
+//      stmt3.close();
       conn.close();
       
    }catch(SQLException se){
