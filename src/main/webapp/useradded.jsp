@@ -13,12 +13,9 @@
         <title>Confirmation</title>
     </head>
     <body>
-
-
         <img src="logo.png" alt="Christmas Wishlist" id="logo">
-        <h2>Selected items were added to your wishlist.</h2>
-
+        <h2>${authname} was successfully added!</h2><br>
         
-        <p>Go back <a href="search.jsp">to keep searching and adding to your list.</a></p>
+        <p><a href="friendsearch.jsp">Add another connection</a> or <a href='index.jsp'>view your list.</a></p>
     </body>
 </html>

@@ -1,0 +1,49 @@
+/*color scheme:
+//crimson #B20000
+//light green #29BA63
+//dark green #3E4C33
+//cream #FFFDC2*/
+
+html{
+    background-color: gainsboro;
+}
+
+body{
+   width: 700px;
+   background-color: white;
+   margin: 20px auto;
+   padding: 15px;
+   height: 100%;
+   color: #354144;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+h1, h2, h3, a{
+    color: #dimgray;
+}
+
+#logo{
+    display: inline-block;
+    float: left;
+    height: 50px;
+
+}
+
+.ss{
+    height: 400px;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 3px #B20000;
+}
+
+#picnav{
+    width: 100px;
+    display: block;
+    margin: auto;
+}
+.w3-btn-floating{
+    color: #B20000;
+    margin: 0 auto;
+    font-size: 30px;
+}
