@@ -93,7 +93,7 @@ public class SearchUsers extends HttpServlet {
       request.setAttribute("userid", userid);
       request.setAttribute("option", "<input type=\"checkbox\" name=\"users\" value=\"${authname}\" />");
       request.setAttribute("authname", authname);
-      request.getRequestDispatcher("/friendsearch.jsp").forward(request, response);
+      request.getRequestDispatcher("/useradded.jsp").forward(request, response);
 
       }
    
