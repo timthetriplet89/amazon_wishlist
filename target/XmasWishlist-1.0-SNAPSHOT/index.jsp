@@ -1,5 +1,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
     <html>
@@ -35,7 +37,14 @@
         <div id="display_list">
             <!-- this will be a foreach statement connecting to database
             and displaying each item saved to the user's list-->
-            
+
+            <c:forEach var="item" items="${wishlist}">                
+                <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
+                <a href="${item.link}">${item.title}</a>
+            </c:forEach>            
+                
+                <br><br><br>    
+                
             <!-- User name will be stored as session setting and will be populated
             here from sesson variable -->
             <h2>${name}'s list</h2>
