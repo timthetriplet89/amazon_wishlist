@@ -77,7 +77,7 @@ public class UserSignIn extends HttpServlet {
 
       while(rs.next()){
          //Retrieve by column name
-         int id  = rs.getInt("id");
+         Integer id  = rs.getInt("id");
          String name = rs.getString("name");
          String username = rs.getString("username");
          String password = rs.getString("password");
@@ -89,7 +89,7 @@ public class UserSignIn extends HttpServlet {
             request.setAttribute("password", password);
             request.getSession().setAttribute("name", name);
             request.getSession().setAttribute("id", id);
-            response.sendRedirect("/LoadWishlist");    
+            response.sendRedirect("LoadWishlist");    
 //            request.getRequestDispatcher("/.jsp").forward(request, response);
          }
          

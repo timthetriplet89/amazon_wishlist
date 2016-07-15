@@ -50,7 +50,8 @@ public class LoadWishlist extends HttpServlet {
 try (PrintWriter out = response.getWriter()) {
             
    java.sql.Connection conn = null;
-   Statement stmt = null;
+//   Statement stmt = null;
+    PreparedStatement stmt2 = null;
    try{
       
       //STEP 2: Register JDBC driver
@@ -60,14 +61,14 @@ try (PrintWriter out = response.getWriter()) {
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
       
       // get id of logged-in user
-      String id = (String)request.getSession().getAttribute("id");
+      String id = request.getSession().getAttribute("id").toString();
             
-      //STEP 4: Execute a query
-      stmt = conn.createStatement();
-      PreparedStatement stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
+      //STEP 4: Execute a query -- Get the items in the user's wishlist, with a lookup using the user's id in the items_users table
+//      stmt = conn.createStatement();
+//      PreparedStatement stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
+      stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
       stmt2.setString(1, id);
       ResultSet rs = stmt2.executeQuery();
-
       if (!rs.next()){
          String errorMessage = "Error- you currently do not have any items in your wishlist.";
          request.setAttribute("errorMessage", errorMessage);
@@ -76,8 +77,8 @@ try (PrintWriter out = response.getWriter()) {
           rs.beforeFirst();
       }
       
-      List<Integer> listItemID = new ArrayList<Integer>();
-      int item_id;
+      List<Integer> listItemID = new ArrayList<>();
+      Integer item_id;
       
       while(rs.next()){
          //Retrieve by column name
@@ -86,9 +87,42 @@ try (PrintWriter out = response.getWriter()) {
          out.println("item_id: " + item_id);
       }
       
+      //  The code works until this point!
+      
+      // This code doesn't work.
+      // Get the name and url for each item in the user's list /////////////////
+      
+//      for (Integer i = 0; i < listItemID.size(); i++) {
+//      
+//        PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
+//        stmt3.setString(1, listItemID.get(i)); ///  This doesn't work.
+//        ResultSet rs3 = stmt3.executeQuery();
+//        if (!rs.next()){
+//           String errorMessage = "Error- you currently do not have any items in your wishlist.";
+//           request.setAttribute("errorMessage", errorMessage);
+//           request.getRequestDispatcher("/search.jsp").forward(request, response);
+//        } else {
+//            rs.beforeFirst();
+//        }
+//
+//        List<Integer> listItems = new ArrayList<>();
+//        String item_name;
+//        String url;
+//
+//        while(rs.next()){
+//           //Retrieve by column name
+//           item_name = rs.getString("item");
+//           listItemID.add(item_id);
+//           out.println("item_id: " + item_id);
+//        }
+//      }
+      //////////////////////////////////////////
+      
+      
       //STEP 6: Clean-up environment
       rs.close();
-      stmt.close();
+//      stmt.close();
+      stmt2.close();
       conn.close();
       
    }catch(SQLException se){
@@ -102,8 +136,8 @@ try (PrintWriter out = response.getWriter()) {
    }finally{
       //finally block used to close resources
       try{
-         if(stmt!=null)
-            stmt.close();
+         if(stmt2!=null)
+            stmt2.close();
       }catch(SQLException se2){
           out.println("error description3:" + (se2.getMessage()));
       }// nothing we can do
