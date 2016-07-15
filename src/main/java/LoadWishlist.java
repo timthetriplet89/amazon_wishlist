@@ -124,37 +124,41 @@ try (PrintWriter out = response.getWriter()) {
         }
       }
 
-//get and display user's friend list
-      PreparedStatement userlist = conn.prepareStatement
-        ("SELECT users.id, users.name FROM users JOIN connections "
-                + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
-      userlist.setString(1, id);
-      ResultSet rsUserList = userlist.executeQuery();
-
-      if (!rs.next()){
-         String errorMessage = "You have no connections";
-         request.setAttribute("errorMessage", errorMessage);
-         request.getRequestDispatcher("/index.jsp").forward(request, response);
-      } else {
-          rs.beforeFirst();
-      }
-
-
-      while(rs.next()){
-         //Retrieve by column name
-         String userid  = rs.getString("users.id");
-         String authname = rs.getString("users.name");
-         
-         request.setAttribute("userid", userid);
-         request.setAttribute("authname", authname);
-         
-         out.print(authname);
-         
-      }
+//DISPLAY USER LIST
+      //used a join to only select the user ID and name to be displayed in list
+//      PreparedStatement userlist = conn.prepareStatement
+//        ("SELECT users.id, users.name FROM users JOIN connections "
+//                + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
+//      userlist.setString(1, id);
+//      ResultSet rsUserList = userlist.executeQuery();
+//
+      //if no connections, show error
+//      if (!rsUserList.next()){
+//         String errorMessage = "You have no connections";
+//         request.setAttribute("errorMessage", errorMessage);
+//         request.getRequestDispatcher("/index.jsp").forward(request, response);
+//      } else {
+//          rs.beforeFirst();
+//      }
+//
+//
+      //get id's and names to be displayed
+//      while(rsUserList.next()){
+//         //Retrieve by column name
+//         String userid  = rs.getString("users.id");
+//         String authname = rs.getString("users.name");
+//      
+      //set attributes to be displayed on index.jsp
+//         request.setAttribute("userid", userid);
+//         request.setAttribute("authname", authname);
+//    
+      //testing output
+//         out.print(authname);
+//         
+//      }
       
-// prepared statement to return join of user ID and name      
-// SELECT users.id, users.name FROM users JOIN connections 
-//      ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?;
+      
+      
       
       ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
