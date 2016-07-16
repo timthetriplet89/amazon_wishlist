@@ -146,6 +146,7 @@ try (PrintWriter out = response.getWriter()) {
       ArrayList<User> listUsers = new ArrayList<>();
       out.print("listUsers= " + listUsers);
       
+      //testing column names in resultset, both work here 
       int idIndex = rsUserList.findColumn("id");
       out.print("idIndex" + idIndex);
       int nameIndex = rsUserList.findColumn("name");
@@ -158,10 +159,13 @@ try (PrintWriter out = response.getWriter()) {
       //get id's and names to be displayed
       while(rsUserList.next()){
          //Retrieve by column name
-          //ERROR occurring here, Column users.id not found
+          //ERROR occurring here, Column users.id not found, and column id not found
           out.print("start loop");
-         String userid  = rs.getString("id");
-         out.print("id=" + userid);
+          //id is int in database, but string here
+         int getuserid  = rs.getInt("id");
+         out.print("getuserid=" + getuserid);
+         String userid = Integer.toString(getuserid);
+         out.print("userid=" + userid);
          String authname = rs.getString("name");
          out.print("authname" + authname);
          User user = new User(userid, authname);
