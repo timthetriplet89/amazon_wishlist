@@ -199,7 +199,7 @@ public class SearchProcessing extends HttpServlet {
             if (itemAttributes != null)
             {
                 String title = getChildContent(itemAttributes, "Title");                   
-                Item item = new Item (title, website);                                   
+                Item item = new Item (i, title, website);                                   
                 listItems.add(item);
             }
         }

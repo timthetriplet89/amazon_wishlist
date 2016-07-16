@@ -80,7 +80,7 @@ public class AddToWishlist extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Integer id = (Integer) request.getSession().getAttribute("id");
-        String[] values = request.getParameterValues("items");
+        String values[] = request.getParameterValues("items");
         
         List<Item> listItems = (List<Item>) request.getSession().getAttribute("listItems");
         
@@ -91,35 +91,58 @@ public class AddToWishlist extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             
+//            for(int i = 0; i < values.length; i++) {
+//                out.println("values[" + i + "] = " + values[i]);
+//            }
+//            out.println("<br><br>");
+            
             java.sql.Connection conn = null;
             Statement stmt = null;
+            
             try{
-
+                out.println("debug statement 2 <br>");
                //STEP 2: Register JDBC driver
                Class.forName("com.mysql.jdbc.Driver");
 
+               out.println("debug statement 3 <br>");
                //STEP 3: Open a connection
                conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
-               PreparedStatement insertuser = conn.prepareStatement("INSERT INTO items (name, url) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);  // SOURCE:  http://stackoverflow.com/questions/7162989/sqlexception-generated-keys-not-requested-mysql              
+               out.println("debug statement 4 <br>");
+               PreparedStatement insertItem = conn.prepareStatement("INSERT INTO items (name, url) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);  // SOURCE:  http://stackoverflow.com/questions/7162989/sqlexception-generated-keys-not-requested-mysql              
                
-               //        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id"));        
+               //        Wishlist wishlist = new Wishlist((int) request.getSession().getAttribute("id")); 
+               out.println("debug statement 5 <br>");
+               // Loop through all the items in the checklist, and add each item to the database
                  for (int i = 0; i < values.length; i++) {
-                     Item item = listItems.get(i);   // ASSUMPTION - VALUES ARRAY FOR CHECK BOXES FROM SEARCH RESULTS FORM (ON SEARCH.JSP) CORRESPONDS ONE TO ONE WITH THE LISTITEMS ATTRIBUTE 
+                     out.println("debug statement 6 <br>");
+                     Item item = listItems.get(Integer.parseInt(values[i]));   // ASSUMPTION - VALUES ARRAY FOR CHECK BOXES FROM SEARCH RESULTS FORM (ON SEARCH.JSP) CORRESPONDS ONE TO ONE WITH THE LISTITEMS ATTRIBUTE 
                      //  Item temp = items.get(Integer.parseInt(values[i]));
 
-                     insertuser.setString(1, item.getTitle());
-                     insertuser.setString(2, item.getLink());
-                     insertuser.executeUpdate();
-                     ResultSet rs = insertuser.getGeneratedKeys();    //  http://stackoverflow.com/questions/5513180/java-preparedstatement-retrieving-last-inserted-id
-                     Integer last_inserted_id = new Integer(0);
+                     out.println("debug statement 7 <br>");
+                     insertItem.setString(1, item.getTitle());
+                     out.println("debug statement 8 <br>");
+                     insertItem.setString(2, item.getLink());
+                     out.println("debug statement 9 <br>");
+                     insertItem.executeUpdate();
+                     out.println("debug statement 10 <br>");
+                     ResultSet rs = insertItem.getGeneratedKeys();    //  http://stackoverflow.com/questions/5513180/java-preparedstatement-retrieving-last-inserted-id
+                     out.println("debug statement 11 <br>");
+                     Integer lastInsertItemID = new Integer(0);
+                     out.println("debug statement 12 <br>");
                      if(rs.next())   
                      {
-                         last_inserted_id = rs.getInt(1);
+                         out.println("debug statement 13 <br>");
+                         lastInsertItemID = rs.getInt(1);
                      }
-                     insertuser = conn.prepareStatement("INSERT INTO user_items (user_id, item_id) VALUES (?, ?)");
-                     insertuser.setString(1, id.toString());
-                     insertuser.setString(2, last_inserted_id.toString());
-                     insertuser.executeUpdate();
+                     out.println("debug statement 14 <br>");
+                     // Add user_item
+                     PreparedStatement insertUserItem = conn.prepareStatement("INSERT INTO user_items (user_id, item_id) VALUES (?, ?)");
+                     out.println("debug statement 15 <br>");
+                     insertUserItem.setString(1, id.toString());
+                     out.println("debug statement 16 <br>");
+                     insertUserItem.setString(2, lastInsertItemID.toString());
+                     out.println("debug statement 17 <br>");
+                     insertUserItem.executeUpdate();
          //            wishlist.addItem(temp.getTitle(), temp.getLink());
                  }
                  
@@ -133,7 +156,7 @@ public class AddToWishlist extends HttpServlet {
              }
         catch(Exception e){
             //Handle errors for Class.forName
-            e.printStackTrace();
+            e.printStackTrace(out);
             out.println("error description2:" + (e.getMessage()));
         }finally{
             //finally block used to close resources

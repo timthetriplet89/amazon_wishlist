@@ -3,7 +3,8 @@ package com.mycompany.wishlist;
 public class Item {
 
 	private int id;
-	private String title;
+        private int index;
+        private String title;
 	private String link;
         
         public Item(String title, String link) {
@@ -11,8 +12,8 @@ public class Item {
             this.setLink(link);
         }
 	
-	public Item(int id, String title, String link) {
-            this.setId(id);
+	public Item(int index, String title, String link) {
+            this.setIndex(index);
             this.setTitle(title);
             this.setLink(link);
 	}
@@ -44,5 +45,13 @@ public class Item {
 	public String toString() {
 		return "<a href=\"" + link + "\">" + title + "</a>";
 	}
+        
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
 	
 }
