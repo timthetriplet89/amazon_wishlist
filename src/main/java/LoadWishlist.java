@@ -22,6 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.ResultSetMetaData;
 
 /**
  *
@@ -128,10 +129,17 @@ try (PrintWriter out = response.getWriter()) {
 //DISPLAY USER LIST
       //used a join to only select the user ID and name to be displayed in list
       PreparedStatement userlist = conn.prepareStatement
-        ("SELECT users.id, users.name FROM users JOIN connections "
+        ("SELECT users.id as id, users.name as name FROM users JOIN connections "
                 + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
       userlist.setString(1, id);
       ResultSet rsUserList = userlist.executeQuery();
+      
+      //testing column names
+      //http://stackoverflow.com/questions/19672412/strange-sqlexception-column-not-found
+      ResultSetMetaData meta = rs.getMetaData();
+    for (int index = 1; index <= meta.getColumnCount(); index++) {
+        System.out.println("Column " + index + " is named " + meta.getColumnName(index));
+        }
       
       //if no connections, show error
       if (!rsUserList.next()){
@@ -139,7 +147,7 @@ try (PrintWriter out = response.getWriter()) {
          request.setAttribute("errorMessage1", errorMessage1);
          request.getRequestDispatcher("/index.jsp").forward(request, response);
       } else {
-          rs.beforeFirst();
+          rsUserList.beforeFirst();
       }
 
       // Store the user list
@@ -160,14 +168,18 @@ try (PrintWriter out = response.getWriter()) {
       while(rsUserList.next()){
          //Retrieve by column name
           //ERROR occurring here, Column users.id not found, and column id not found
-          out.print("start loop");
+          out.print("start loop" + rsUserList + "end");
+          
           //id is int in database, but string here
          int getuserid  = rs.getInt("id");
          out.print("getuserid=" + getuserid);
+         
          String userid = Integer.toString(getuserid);
          out.print("userid=" + userid);
+         
          String authname = rs.getString("name");
          out.print("authname" + authname);
+         
          User user = new User(userid, authname);
          listUsers.add(user);
          
@@ -183,8 +195,7 @@ try (PrintWriter out = response.getWriter()) {
 //         request.setAttribute("userid", userid);
 //         request.setAttribute("authname", authname);
 //    
-      //testing output
-//         out.print(authname);
+      
 //         
 //      }
       
