@@ -189,9 +189,11 @@ public class SearchProcessing extends HttpServlet {
         
         List<Item> listItems = new ArrayList<>();
            
-        for (int i = 0; i < itemList.getLength() && i < 10; i++) {  // For all results:  i < itemList.getLength()
+        Integer indexItem = 0;
+//        for (int i = 0; i < itemList.getLength() && i < 10; i++) {  // For all results:  i < itemList.getLength()  //
+        for (int loopI = 0; loopI < itemList.getLength() && indexItem < 10; loopI++) {  // For all results:  i < itemList.getLength()
             
-            Element element = (Element) itemList.item(i);
+            Element element = (Element) itemList.item(loopI);
             
             String website = getChildContent(element, "DetailPageURL");
             Element itemAttributes = getChild(element, "ItemAttributes");
@@ -199,8 +201,10 @@ public class SearchProcessing extends HttpServlet {
             if (itemAttributes != null)
             {
                 String title = getChildContent(itemAttributes, "Title");                   
-                Item item = new Item (i, title, website);                                   
+//                Item item = new Item (i, title, website);        
+                Item item = new Item (indexItem, title, website);   
                 listItems.add(item);
+                indexItem++;
             }
         }
           
