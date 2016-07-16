@@ -5,6 +5,7 @@
  */
 
 import com.mycompany.wishlist.Item;
+import com.mycompany.wishlist.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.DriverManager;
@@ -126,29 +127,35 @@ try (PrintWriter out = response.getWriter()) {
 
 //DISPLAY USER LIST
       //used a join to only select the user ID and name to be displayed in list
-//      PreparedStatement userlist = conn.prepareStatement
-//        ("SELECT users.id, users.name FROM users JOIN connections "
-//                + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
-//      userlist.setString(1, id);
-//      ResultSet rsUserList = userlist.executeQuery();
-//
+      PreparedStatement userlist = conn.prepareStatement
+        ("SELECT users.id, users.name FROM users JOIN connections "
+                + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
+      userlist.setString(1, id);
+      ResultSet rsUserList = userlist.executeQuery();
+
       //if no connections, show error
-//      if (!rsUserList.next()){
-//         String errorMessage = "You have no connections";
-//         request.setAttribute("errorMessage", errorMessage);
-//         request.getRequestDispatcher("/index.jsp").forward(request, response);
-//      } else {
-//          rs.beforeFirst();
-//      }
-//
-//
+      if (!rsUserList.next()){
+         String errorMessage = "You have no connections";
+         request.setAttribute("errorMessage", errorMessage);
+         request.getRequestDispatcher("/index.jsp").forward(request, response);
+      } else {
+          rs.beforeFirst();
+      }
+
+      // Store the user list
+      ArrayList<User> listUsers = new ArrayList<>();
       //get id's and names to be displayed
-//      while(rsUserList.next()){
-//         //Retrieve by column name
-//         String userid  = rs.getString("users.id");
-//         String authname = rs.getString("users.name");
-//      
+      while(rsUserList.next()){
+         //Retrieve by column name
+         String userid  = rs.getString("users.id");
+         String authname = rs.getString("users.name");
+         User user = new User(userid, authname);
+         listUsers.add(user);
+      }
+      
       //set attributes to be displayed on index.jsp
+      request.setAttribute("listUsers", listUsers);
+      
 //         request.setAttribute("userid", userid);
 //         request.setAttribute("authname", authname);
 //    
@@ -157,14 +164,15 @@ try (PrintWriter out = response.getWriter()) {
 //         
 //      }
       
-      
-      
-      
-      ServletContext sc = getServletContext();      
+         ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
-         request.setAttribute("wishlist", wishlist);
          
+         request.setAttribute("wishlist", wishlist);
          request.getSession().setAttribute("wishlist", wishlist);
+         
+         request.setAttribute("listUsers", listUsers);                                    //  UNDER TEST!
+         request.getSession().setAttribute("listUsers", listUsers);                       //  UNDER TEST!     
+         
          rd.forward(request, response);                                         //  Go To Index.jsp... 
       
       //////////////////////////////////////////
@@ -201,7 +209,7 @@ try (PrintWriter out = response.getWriter()) {
          out.println("error description4:" + (se.getMessage()));
       }//end finally try
    }//end try
-        }
+        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

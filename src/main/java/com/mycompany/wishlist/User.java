@@ -12,26 +12,31 @@ package com.mycompany.wishlist;
  */
 public class User {
     
-    private int id;
+    private String id;
     private String name;
     private String username;
-    
-    public User(String name, String username) {
-            this.setName(name);
-            this.setUsername(username);
-        }
 	
-	public User(int id, String name, String username) {
+	public User(String id, String name, String username) {
             this.setId(id);
             this.setName(name);
             this.setUsername(username);
 	}
+        
+    public User(String id, String authname) {
+        this.setId(id);
+        this.setName(authname);
+    }
 
-    public int getId() {
+//    public User(String name, String username) {
+//            this.setName(name);
+//            this.setUsername(username);
+//        }        
+        
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
