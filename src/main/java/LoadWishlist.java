@@ -146,6 +146,15 @@ try (PrintWriter out = response.getWriter()) {
       ArrayList<User> listUsers = new ArrayList<>();
       out.print("listUsers= " + listUsers);
       
+      int idIndex = rsUserList.findColumn("id");
+      out.print("idIndex" + idIndex);
+      int nameIndex = rsUserList.findColumn("name");
+      out.print("nameIndex" + nameIndex);
+      int useridIndex = rsUserList.findColumn("users.id");
+      out.print("useridIndex" + useridIndex);
+      int usernameIndex = rsUserList.findColumn("users.name");
+      out.print("usernameIndex" + usernameIndex);
+      
       //get id's and names to be displayed
       while(rsUserList.next()){
          //Retrieve by column name
