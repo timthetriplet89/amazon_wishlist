@@ -138,7 +138,7 @@ try (PrintWriter out = response.getWriter()) {
       //http://stackoverflow.com/questions/19672412/strange-sqlexception-column-not-found
       ResultSetMetaData meta = rs.getMetaData();
     for (int index = 1; index <= meta.getColumnCount(); index++) {
-        System.out.println("Column " + index + " is named " + meta.getColumnName(index));
+//        System.out.println("Column " + index + " is named " + meta.getColumnName(index));
         }
       
       //if no connections, show error
@@ -152,45 +152,45 @@ try (PrintWriter out = response.getWriter()) {
 
       // Store the user list
       ArrayList<User> listUsers = new ArrayList<>();
-      out.print("listUsers= " + listUsers);
+//      out.print("listUsers= " + listUsers);
       
       //testing column names in resultset, both work here 
       int idIndex = rsUserList.findColumn("id");
-      out.print("idIndex" + idIndex);
+//      out.print("idIndex" + idIndex);
       int nameIndex = rsUserList.findColumn("name");
-      out.print("nameIndex" + nameIndex);
+//      out.print("nameIndex" + nameIndex);
       int useridIndex = rsUserList.findColumn("users.id");
       out.print("useridIndex" + useridIndex);
-      int usernameIndex = rsUserList.findColumn("users.name");
-      out.print("usernameIndex" + usernameIndex);
+//      int usernameIndex = rsUserList.findColumn("users.name");
+//      out.print("usernameIndex" + usernameIndex);
       
       //get id's and names to be displayed
       while(rsUserList.next()){
          //Retrieve by column name
           //ERROR occurring here, Column users.id not found, and column id not found
-          out.print("start loop" + rsUserList + "end");
+//          out.print("start loop" + rsUserList + "end");
           
           //id is int in database, but string here
-         int getuserid  = rs.getInt("id");
-         out.print("getuserid=" + getuserid);
+         int getuserid  = rsUserList.getInt("id");
+//         out.print("getuserid=" + getuserid);
          
          String userid = Integer.toString(getuserid);
-         out.print("userid=" + userid);
+//         out.print("userid=" + userid);
          
-         String authname = rs.getString("name");
-         out.print("authname" + authname);
+         String authname = rsUserList.getString("name");
+//         out.print("authname" + authname);
          
          User user = new User(userid, authname);
          listUsers.add(user);
          
-         out.print(userid);
-         out.print(authname);
-         out.print("listUsersloop=" + listUsers);
+//         out.print(userid);
+//         out.print(authname);
+//         out.print("listUsersloop=" + listUsers);
       }
       
       //set attributes to be displayed on index.jsp
       request.setAttribute("listUsers", listUsers);
-      out.print("listUsers2=" + listUsers);
+//      out.print("listUsers2=" + listUsers);
       
 //         request.setAttribute("userid", userid);
 //         request.setAttribute("authname", authname);
@@ -208,6 +208,7 @@ try (PrintWriter out = response.getWriter()) {
          request.setAttribute("listUsers", listUsers);                                    //  UNDER TEST!
          request.getSession().setAttribute("listUsers", listUsers);                       //  UNDER TEST!     
          
+         rd.forward(request, response);
          //force error rd.forward(request, response);                                         //  Go To Index.jsp... 
       
       //////////////////////////////////////////
@@ -215,6 +216,7 @@ try (PrintWriter out = response.getWriter()) {
       
       //STEP 6: Clean-up environment
       rs.close();
+      rsUserList.close();
 //      stmt.close();
       stmtGetIds.close();
 //      stmt3.close();
