@@ -1,8 +1,4 @@
-<%-- 
-    Document   : itemAddedConfirmation
-    Created on : Jul 11, 2016, 11:35:26 PM
-    Author     : timth
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,8 +10,8 @@
     </head>
     <body>
         <img src="logo.png" alt="Christmas Wishlist" id="logo">
-        <h2>${authname} was successfully added!</h2><br>
+        <h2>Congratulations, ${name}! Your account was created successfully!</h2><br>
         
-        <p><a href="friendsearch.jsp">Add another connection</a> or <a href='LoadWishlist'>view your list.</a></p>
+        <p><a href="signin.jsp">Click here to sign in.</a></p>
     </body>
 </html>

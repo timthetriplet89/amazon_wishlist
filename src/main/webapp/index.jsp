@@ -19,7 +19,7 @@
         <p>"You'll shoot your eye out, kid!"</p><br>
         
         <div id="user_list">
-            <h2>${authname}'s Friends</h2>
+            <h2>${name}'s Friends</h2>
             ${errorMessage1}
             <c:forEach var="user" items="${listUsers}">
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->

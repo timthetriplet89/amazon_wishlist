@@ -77,7 +77,7 @@ public class CreateUser extends HttpServlet {
          String user = rs.getString("username");
          
          //Check for duplicates
-         if (username.equals(username)){
+         if (user.equals(username)){
          String errorMessage = "The username is already in use. Please try again!";
          request.setAttribute("errorMessage", errorMessage);
          request.getRequestDispatcher("/newuser.jsp").forward(request, response);
@@ -96,7 +96,7 @@ public class CreateUser extends HttpServlet {
       request.setAttribute("username", username);
       request.setAttribute("password", password);
       request.getSession().setAttribute("name", name);
-      response.sendRedirect("UserSignIn"); 
+      request.getRequestDispatcher("/newuserconfirmation.jsp").forward(request, response);
       
       
       //STEP 6: Clean-up environment
