@@ -144,13 +144,17 @@ try (PrintWriter out = response.getWriter()) {
 
       // Store the user list
       ArrayList<User> listUsers = new ArrayList<>();
+      out.print("listUsers= " + listUsers);
       
       //get id's and names to be displayed
       while(rsUserList.next()){
          //Retrieve by column name
           //ERROR occurring here, Column users.id not found
+          out.print("start loop");
          String userid  = rs.getString("id");
+         out.print("id=" + userid);
          String authname = rs.getString("name");
+         out.print("authname" + authname);
          User user = new User(userid, authname);
          listUsers.add(user);
          
