@@ -96,7 +96,7 @@ public class CreateUser extends HttpServlet {
       request.setAttribute("newusername", newusername);
       request.setAttribute("newpassword", newpassword);
       request.getSession().setAttribute("name", newname);
-      request.getRequestDispatcher("/index.jsp").forward(request, response);
+      request.getRequestDispatcher("LoadWishlist").forward(request, response);
       
       //STEP 6: Clean-up environment
       rs.close();

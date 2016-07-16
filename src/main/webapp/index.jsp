@@ -19,11 +19,11 @@
         <p>"You'll shoot your eye out, kid!"</p><br>
         
         <div id="user_list">
-            <h2>${name}'s Friends</h2>
+            <h2>${authname}'s Friends</h2>
             ${errorMessage1}
             <c:forEach var="user" items="${listUsers}">
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
-                <a href="FriendList?id=${user.id}">${user.name}</a><br>
+                <a href="FriendList?id=${user.id}&authname=${user.name}">${user.name}</a><br>
             </c:forEach>
                 
             <a href="friendsearch.jsp">Add a friend</a><br>

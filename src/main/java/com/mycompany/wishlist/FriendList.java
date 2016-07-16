@@ -46,7 +46,8 @@ try (PrintWriter out = response.getWriter()) {
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
       
       // get id of connected user
-      String id = request.getParameter("id");;
+      String id = request.getParameter("id");
+      String authname = request.getParameter("authname");
             
       //STEP 4: Execute a query -- Get the items in the user's wishlist, with a lookup using the user's id in the items_users table
       stmtGetIds = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
@@ -106,6 +107,7 @@ try (PrintWriter out = response.getWriter()) {
          ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/friendlist.jsp");
          
+         request.setAttribute("authname", authname);
          request.setAttribute("wishlist", wishlist);
          request.getSession().setAttribute("wishlist", wishlist);
          
