@@ -23,7 +23,7 @@
             ${errorMessage1}
             <c:forEach var="user" items="${listUsers}">
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
-                <a href="FriendList?id=${user.id}&authname=${user.name}">${user.name}</a><br>
+                <a href="FriendList?id=${user.id}&authname=${user.name}">${user.name}</a><br><br>
             </c:forEach>
                 
             <a href="friendsearch.jsp">Add a friend</a><br>
@@ -34,7 +34,7 @@
             ${errorMessage2}
             <c:forEach var="item" items="${wishlist}">
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
-                <a href="${item.link}">${item.title}</a><br>
+                <a href="${item.link}">${item.title}</a><br><br>
             </c:forEach>
                 
                 <br><br><br>

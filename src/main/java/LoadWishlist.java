@@ -35,7 +35,6 @@ public class LoadWishlist extends HttpServlet {
     String DBUSERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
     String DBPASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
     String DBURL = "jdbc:mysql://" + System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/north_pole";
-      
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -53,7 +52,6 @@ public class LoadWishlist extends HttpServlet {
 try (PrintWriter out = response.getWriter()) {
             
    java.sql.Connection conn = null;
-//   Statement stmt = null;
     PreparedStatement stmtGetIds = null;
    try{
       
@@ -67,8 +65,6 @@ try (PrintWriter out = response.getWriter()) {
       String id = request.getSession().getAttribute("id").toString();
             
       //STEP 4: Execute a query -- Get the items in the user's wishlist, with a lookup using the user's id in the items_users table
-//      stmt = conn.createStatement();
-//      PreparedStatement stmt2 = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
       stmtGetIds = conn.prepareStatement("SELECT item_id FROM user_items WHERE user_id = ? ");
       stmtGetIds.setString(1, id);
       ResultSet rs = stmtGetIds.executeQuery();
@@ -76,7 +72,6 @@ try (PrintWriter out = response.getWriter()) {
          String errorMessage2 = "Error- you currently do not have any items in your wishlist.";
          out.println(errorMessage2);
          request.setAttribute("errorMessage2", errorMessage2);
-//         request.getRequestDispatcher("/search.jsp").forward(request, response);
       } else {
           rs.beforeFirst();
       }
@@ -88,13 +83,10 @@ try (PrintWriter out = response.getWriter()) {
          //Retrieve each item id
          item_id  = rs.getInt("item_id");
          listItemID.add(item_id);
-//         out.println("item_id: " + item_id + "<br>");
       }
-      
 
       // Get the name and url for each item in the user's list 
       List<Item> wishlist = new ArrayList<>();
-//      PreparedStatement stmt3 = conn.prepareStatement("SELECT name, url FROM items WHERE id = ? ");
       
       out.println("listItemID.size() = " + listItemID.size());
       for (Integer i = 0; i < listItemID.size(); i++) {
@@ -106,7 +98,6 @@ try (PrintWriter out = response.getWriter()) {
            String errorMessage = "Error...";
            out.println(errorMessage);
            request.setAttribute("errorMessage", errorMessage);
-//           request.getRequestDispatcher("/search.jsp").forward(request, response);
         } else {
             rsWishlist.beforeFirst();
         }
@@ -117,12 +108,9 @@ try (PrintWriter out = response.getWriter()) {
         while(rsWishlist.next()){
            //Retrieve by column name
            itemName = rsWishlist.getString("name");
-//           out.println("itemName = " + itemName);
            url = rsWishlist.getString("url");
-//           out.println("url = " + url);
            Item item = new Item(itemName, url);
            wishlist.add(item);
-//           out.println("item_id: " + item_id);
         }
       }
 
@@ -132,9 +120,7 @@ try (PrintWriter out = response.getWriter()) {
         ("SELECT users.id as id, users.name as name FROM users JOIN connections "
                 + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
       userlist.setString(1, id);
-      ResultSet rsUserList = userlist.executeQuery();
-      
-      
+      ResultSet rsUserList = userlist.executeQuery();      
       
       //if no connections, show error
       if (!rsUserList.next()){
@@ -165,14 +151,6 @@ try (PrintWriter out = response.getWriter()) {
       
       //set attributes to be displayed on index.jsp
       request.setAttribute("listUsers", listUsers);
-//      out.print("listUsers2=" + listUsers);
-      
-//         request.setAttribute("userid", userid);
-//         request.setAttribute("authname", authname);
-//    
-      
-//         
-//      }
       
          ServletContext sc = getServletContext();      
          RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
@@ -183,17 +161,12 @@ try (PrintWriter out = response.getWriter()) {
          request.setAttribute("listUsers", listUsers);                                    //  UNDER TEST!
          request.getSession().setAttribute("listUsers", listUsers);                       //  UNDER TEST!     
          
-         rd.forward(request, response);
-         
-      //////////////////////////////////////////
-      
+         rd.forward(request, response);      
       
       //STEP 6: Clean-up environment
       rs.close();
       rsUserList.close();
-//      stmt.close();
       stmtGetIds.close();
-//      stmt3.close();
       conn.close();
       
    }catch(SQLException se){

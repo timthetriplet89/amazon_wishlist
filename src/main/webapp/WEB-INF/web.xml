@@ -11,7 +11,7 @@
         <servlet-name>MultipleValuesSingleParam</servlet-name>
         <servlet-class>com.ibc.multiplevalues.MultipleValuesSingleParamServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
+    <servlet-mapping>  <!--  Source:  http://theopentutorials.com/post/uncategorized/getting-checkbox-values-from-html-form-in-servlet/  -->
         <servlet-name>MultipleValuesSingleParam</servlet-name>
         <url-pattern>/multiplevalues.do</url-pattern>
     </servlet-mapping>

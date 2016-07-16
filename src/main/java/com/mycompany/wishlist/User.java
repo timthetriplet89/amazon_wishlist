@@ -26,11 +26,6 @@ public class User {
         this.setId(id);
         this.setName(authname);
     }
-
-//    public User(String name, String username) {
-//            this.setName(name);
-//            this.setUsername(username);
-//        }        
         
     public String getId() {
         return id;

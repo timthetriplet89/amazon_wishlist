@@ -19,7 +19,7 @@
         
         <form action='SearchProcessing' method='post'>
             <input type='text' name='search_box'>
-            <input type='submit' value='Search'>
+            <input type='submit' name='submit' value='Search'>
         </form>
         <br/>
         
@@ -28,12 +28,10 @@
 
                 <input type="checkbox" name="items" value="${item.index}" />     <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="${item.link}">${item.title}</a>
-                <!--<input type="checkbox" name="item[]"  />-->
                 <br />
             </c:forEach>
-            <input type="submit" value="Add" />
+            <input type="submit" value="Add Item" />
         </form>    
-            
         
         <br/>    
         <a href='index.jsp'>View your list</a>    
