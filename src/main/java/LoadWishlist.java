@@ -132,8 +132,7 @@ try (PrintWriter out = response.getWriter()) {
                 + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
       userlist.setString(1, id);
       ResultSet rsUserList = userlist.executeQuery();
-      out.print ("rsUserlist=" + rsUserList);
-
+      
       //if no connections, show error
       if (!rsUserList.next()){
          String errorMessage1 = "You have no connections";
@@ -145,13 +144,13 @@ try (PrintWriter out = response.getWriter()) {
 
       // Store the user list
       ArrayList<User> listUsers = new ArrayList<>();
-      out.print("listUsers=" + listUsers);
       
       //get id's and names to be displayed
       while(rsUserList.next()){
          //Retrieve by column name
-         String userid  = rs.getString("users.id");
-         String authname = rs.getString("users.name");
+          //ERROR occurring here, Column users.id not found
+         String userid  = rs.getString("id");
+         String authname = rs.getString("name");
          User user = new User(userid, authname);
          listUsers.add(user);
          
