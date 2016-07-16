@@ -20,19 +20,18 @@
         
         <div id="user_list">
             <h2>${name}'s Friends</h2>
+            ${errorMessage1};
             <c:forEach var="user" items="${listUsers}">
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="FriendList?id=${user.id}">${user.name}</a><br>
             </c:forEach>
-                user= ${user.id}<br>
-                name= ${user.name} <br>
-                listusers= ${listUsers}<br>
+                
             <a href="friendsearch.jsp">Add a friend</a><br>
         </div><br>
         
         <div id="display_list">
             <h2>${name}'s list</h2>
-            
+            ${errorMessage2};
             <c:forEach var="item" items="${wishlist}">
                 <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="${item.link}">${item.title}</a><br>

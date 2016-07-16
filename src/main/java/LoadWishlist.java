@@ -72,9 +72,9 @@ try (PrintWriter out = response.getWriter()) {
       stmtGetIds.setString(1, id);
       ResultSet rs = stmtGetIds.executeQuery();
       if (!rs.next()){
-         String errorMessage = "Error- you currently do not have any items in your wishlist.";
-         out.println(errorMessage);
-         request.setAttribute("errorMessage", errorMessage);
+         String errorMessage2 = "Error- you currently do not have any items in your wishlist.";
+         out.println(errorMessage2);
+         request.setAttribute("errorMessage2", errorMessage2);
 //         request.getRequestDispatcher("/search.jsp").forward(request, response);
       } else {
           rs.beforeFirst();
@@ -132,11 +132,12 @@ try (PrintWriter out = response.getWriter()) {
                 + "ON users.id = connections.listAuthorId WHERE connections.listViewerId = ?");
       userlist.setString(1, id);
       ResultSet rsUserList = userlist.executeQuery();
+      out.print ("rsUserlist=" + rsUserList);
 
       //if no connections, show error
       if (!rsUserList.next()){
-         String errorMessage = "You have no connections";
-         request.setAttribute("errorMessage", errorMessage);
+         String errorMessage1 = "You have no connections";
+         request.setAttribute("errorMessage1", errorMessage1);
          request.getRequestDispatcher("/index.jsp").forward(request, response);
       } else {
           rs.beforeFirst();
@@ -144,6 +145,8 @@ try (PrintWriter out = response.getWriter()) {
 
       // Store the user list
       ArrayList<User> listUsers = new ArrayList<>();
+      out.print("listUsers=" + listUsers);
+      
       //get id's and names to be displayed
       while(rsUserList.next()){
          //Retrieve by column name
@@ -151,10 +154,15 @@ try (PrintWriter out = response.getWriter()) {
          String authname = rs.getString("users.name");
          User user = new User(userid, authname);
          listUsers.add(user);
+         
+         out.print(userid);
+         out.print(authname);
+         out.print("listUsersloop=" + listUsers);
       }
       
       //set attributes to be displayed on index.jsp
       request.setAttribute("listUsers", listUsers);
+      out.print("listUsers2=" + listUsers);
       
 //         request.setAttribute("userid", userid);
 //         request.setAttribute("authname", authname);
@@ -173,7 +181,7 @@ try (PrintWriter out = response.getWriter()) {
          request.setAttribute("listUsers", listUsers);                                    //  UNDER TEST!
          request.getSession().setAttribute("listUsers", listUsers);                       //  UNDER TEST!     
          
-         rd.forward(request, response);                                         //  Go To Index.jsp... 
+         //force error rd.forward(request, response);                                         //  Go To Index.jsp... 
       
       //////////////////////////////////////////
       
