@@ -21,8 +21,12 @@
         <div id="user_list">
             <h2>${name}'s Friends</h2>
             <c:forEach var="user" items="${listUsers}">
-                <a href="LoadWishlist?id=${user.id}">${user.name}</a><br>
+                <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
+                <a href="FriendList?id=${user.id}">${user.name}</a><br>
             </c:forEach>
+                user= ${user.id}<br>
+                name= ${user.name} <br>
+                listusers= ${listUsers}<br>
             <a href="friendsearch.jsp">Add a friend</a><br>
         </div><br>
         
@@ -36,12 +40,7 @@
                 
                 <br><br><br>
                 
-            <c:forEach var="user" items="${listUsers}">
-                <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
-                <a href="FriendList?id=${user.id}">${user.name}</a><br>
-            </c:forEach>
-            
-        </div><br>
+       </div><br>
         <p><a href='search.jsp'>Click here to add items to your wish list</a></p>
         <p>Brought to you by the awesomeness that is Team 4</p>
     </body>
