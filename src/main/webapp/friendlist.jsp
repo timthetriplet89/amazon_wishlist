@@ -13,7 +13,7 @@
     </head>
     <body>
         <img src="logo.png" alt="Christmas Wishlist" id="logo">
-        <h1>${name}'s List</h1>
+        <h1>${authname}'s List</h1>
         
         <div id="friend_list">
             ${errorMessage2}

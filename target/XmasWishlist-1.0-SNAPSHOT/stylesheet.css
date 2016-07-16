@@ -1,7 +1,7 @@
 /*color scheme:
 //crimson #B20000
 //light green #29BA63
-//dark green #3E4C33
+//dark green 
 //cream #FFFDC2*/
 
 html{
@@ -24,8 +24,11 @@ body {
     height: 100%;
     color: #3E4C33
 }
-h1, h2, h3, a{
+h1, h2, h3{
     color: #29BA63;
+}
+a{
+    color: #3E4C33
 }
 ul li{
     list-style-type: none;
