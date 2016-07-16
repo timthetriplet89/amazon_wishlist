@@ -27,7 +27,7 @@
             </c:forEach>
                 
             <a href="friendsearch.jsp">Add a friend</a><br>
-        </div><br>
+        </div>
         
         <div id="display_list">
             <h2>${name}'s list</h2>
@@ -39,7 +39,7 @@
                 
                 <br><br><br>
                 
-       </div><br>
+        </div><br>
         <p><a href='search.jsp'>Click here to add items to your wish list</a></p>
         <p>Brought to you by the awesomeness that is Team 4</p>
     </body>
