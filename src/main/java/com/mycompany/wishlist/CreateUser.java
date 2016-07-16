@@ -61,9 +61,9 @@ public class CreateUser extends HttpServlet {
       conn = DriverManager.getConnection(DBURL , DBUSERNAME , DBPASSWORD);
       
       //get Username and Password
-      String newname = request.getParameter("name");
-      String newusername = request.getParameter("username");
-      String newpassword = request.getParameter("password");
+      String name = request.getParameter("name");
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
       
       //Get current usernames from database
       stmt = conn.createStatement();
@@ -74,10 +74,10 @@ public class CreateUser extends HttpServlet {
       //STEP 5: Extract data from result set
       while(rs.next()){
          //Retrieve by column name
-         String username = rs.getString("username");
+         String user = rs.getString("username");
          
          //Check for duplicates
-         if (username.equals(newusername)){
+         if (username.equals(username)){
          String errorMessage = "The username is already in use. Please try again!";
          request.setAttribute("errorMessage", errorMessage);
          request.getRequestDispatcher("/newuser.jsp").forward(request, response);
@@ -87,16 +87,17 @@ public class CreateUser extends HttpServlet {
       //Insert user into table
       PreparedStatement insertuser = conn.prepareStatement
         ("INSERT INTO users (name, username, password) VALUES (?, ?, ?)");
-      insertuser.setString(1, newname);
-      insertuser.setString(2, newusername);
-      insertuser.setString(3, newpassword);
+      insertuser.setString(1, name);
+      insertuser.setString(2, username);
+      insertuser.setString(3, password);
       insertuser.executeUpdate();
       
-      request.setAttribute("newname", newname);
-      request.setAttribute("newusername", newusername);
-      request.setAttribute("newpassword", newpassword);
-      request.getSession().setAttribute("name", newname);
-      request.getRequestDispatcher("LoadWishlist").forward(request, response);
+      request.setAttribute("name", name);
+      request.setAttribute("username", username);
+      request.setAttribute("password", password);
+      request.getSession().setAttribute("name", name);
+      response.sendRedirect("UserSignIn"); 
+      
       
       //STEP 6: Clean-up environment
       rs.close();
