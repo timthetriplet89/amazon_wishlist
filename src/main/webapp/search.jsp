@@ -27,7 +27,7 @@
         
         <form action="AddToWishlist" method="post">
             <c:forEach var="item" items="${listItems}">                
-                <input type="checkbox" name="items" value="${item.title}" />    <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
+                <input type="radio" name="items" value="${item.title}" />    <!-- http://stackoverflow.com/questions/5618556/java-servlet-request-getparametervalues  -->
                 <a href="${item.link}">${item.title}</a>
                 <br />                
                 <!--<input type="checkbox" name="item[]"  />-->
