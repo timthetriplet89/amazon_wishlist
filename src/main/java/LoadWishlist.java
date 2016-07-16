@@ -134,7 +134,7 @@ try (PrintWriter out = response.getWriter()) {
       userlist.setString(1, id);
       ResultSet rsUserList = userlist.executeQuery();
       
-      //testing column names
+      //testing column names, didn't work
       //http://stackoverflow.com/questions/19672412/strange-sqlexception-column-not-found
       ResultSetMetaData meta = rs.getMetaData();
     for (int index = 1; index <= meta.getColumnCount(); index++) {
