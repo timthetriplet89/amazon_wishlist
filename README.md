@@ -1,0 +1,3 @@
+# amazon_wishlist
+
+Are you tired of getting all the wrong things for Christmas? Well we've got you covered this year! Our Christmas wishlist app tracks your Christmas wishlist and allows you to share it with friends and family to ensure you get exactly what you asked for this year. By connecting with others on our app you can also view their wishlist and buy them the best Christmas gift. Our app includes a simpler search interface that allows you to search Amazon for specific items and add them to your list. Save extra time by clicking directly on the item and go directly to Amazon to buy it! Save time, money and stress this year by using our Christmas Wishlist app to ensure you and your friends all get what you want... assuming you make it on to the nice list
